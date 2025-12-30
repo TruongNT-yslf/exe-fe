@@ -1,0 +1,48 @@
+/* Hero section */
+.hero {
+    background: url("https://source.unsplash.com/1600x900/?technology,office")
+    no-repeat center center/cover;
+    height: 100vh;
+    padding-top: 80px;
+}
+
+.hero h1 {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.hero p {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Features */
+.feature-card {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* CTA */
+.cta {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    padding: 80px 20px;
+}
+.fixed-size-card {
+    width: 355px;
+    height: 280px;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    max-height: calc(1.2em * 3);
+    line-height: 1.2em;
+}
+
