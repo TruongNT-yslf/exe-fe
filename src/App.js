@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import ProtectedRoute from "./routes/ProtectedRoute";
 // import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+import ProfilePage from "./pages/profile/ProfilePage";
 function App() {
     const token = getToken();
     return (
@@ -32,6 +33,7 @@ function App() {
                     <Route path="/logout" element={<Logout />} />
 
                     {/* USER routes */}
+                    <Route path="/profile" element={<ProfilePage />} />
 
                     {/* STAFF routes */}
 
