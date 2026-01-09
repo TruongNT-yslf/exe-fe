@@ -2,12 +2,17 @@
 import { useState, useEffect, useRef } from "react"
 import "./ChatBox.css"
 import { askAI } from "../../api/AI"
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from "react-markdown"
 
 export default function ChatBox() {
     const [isExpanded, setIsExpanded] = useState(false)
+    // Khởi tạo state tin nhắn
     const [messages, setMessages] = useState([
-        { id: 1, role: "ai", content: "Xin chào! Mình là **May É** 🌿. Bạn đang tìm đồ mây tre trang trí hay quà tặng ạ?" },
+        {
+            id: 1,
+            role: "ai",
+            content: "Xin chào! 🌿 Mình là **May É**. Bạn cần tư vấn gì về đồ mây tre hôm nay ạ?",
+        },
     ])
     const [input, setInput] = useState("")
     const [selectedImage, setSelectedImage] = useState(null)
@@ -15,17 +20,18 @@ export default function ChatBox() {
 
     const fileInputRef = useRef(null)
     const messagesEndRef = useRef(null)
+    const chatBodyRef = useRef(null)
 
-    // Tự động cuộn xuống cuối khi có tin nhắn mới
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        }, 0)
     }
 
     useEffect(() => {
         scrollToBottom()
-    }, [messages, isExpanded, isLoading])
+    }, [messages])
 
-    // Xử lý chọn ảnh
     const handleFileSelect = (e) => {
         const file = e.target.files?.[0]
         if (file) {
@@ -33,134 +39,174 @@ export default function ChatBox() {
             reader.onload = (event) => setSelectedImage(event.target.result)
             reader.readAsDataURL(file)
         }
-        // Reset input để chọn lại cùng 1 ảnh được
-        e.target.value = null;
+        e.target.value = ""
+    }
+
+    const formatResponseText = (text) => {
+        return text.replace(/\\n/g, "\n").trim()
     }
 
     const handleSendMessage = async (e) => {
         e.preventDefault()
         if (!input.trim() && !selectedImage) return
 
-        // 1. Tạo tin nhắn user và hiển thị ngay
         const userMsg = {
             id: Date.now(),
             role: "user",
             content: input,
-            image: selectedImage
+            image: selectedImage,
         }
 
-        // Chỉ gửi phần text và role lên server (trừ tin nhắn hiện tại có ảnh)
-        const historyForBackend = messages.map(msg => ({
-            role: msg.role,
-            content: msg.content
-        }));
+        // Chuẩn bị lịch sử chat cho backend
+        const historyForBackend = messages.map((msg) => ({
+            role: msg.role === "user" ? "user" : "model",
+            content: msg.content,
+        }))
 
-        setMessages(prev => [...prev, userMsg])
+        setMessages((prev) => [...prev, userMsg])
         setInput("")
         setSelectedImage(null)
         setIsLoading(true)
 
         try {
-            // 2. Gọi API
-            const responseText = await askAI({
+            const response = await askAI({
                 question: userMsg.content,
                 image: userMsg.image,
-                chatHistory: historyForBackend
+                chatHistory: historyForBackend,
             })
 
-            // 3. Hiển thị phản hồi AI
-            setMessages(prev => [...prev, {
-                id: Date.now() + 1,
-                role: "ai",
-                content: responseText
-            }])
+            let aiResponse = ""
+
+            // Xử lý các dạng phản hồi khác nhau từ API
+            if (typeof response === "string") {
+                aiResponse = response
+            } else if (response && typeof response === "object" && "answer" in response) {
+                aiResponse = response.answer || "Không có phản hồi"
+            } else {
+                aiResponse = JSON.stringify(response)
+            }
+
+            aiResponse = formatResponseText(aiResponse)
+
+            setMessages((prev) => [
+                ...prev,
+                {
+                    id: Date.now() + 1,
+                    role: "ai",
+                    content: aiResponse || "Xin lỗi, tôi không thể xử lý yêu cầu của bạn lúc này ạ",
+                },
+            ])
         } catch (err) {
-            setMessages(prev => [...prev, {
-                id: Date.now() + 1,
-                role: "ai",
-                content: "⚠️ _Có lỗi kết nối, bạn thử lại sau nhé!_"
-            }])
+            console.error("Chat error:", err)
+            setMessages((prev) => [
+                ...prev,
+                {
+                    id: Date.now() + 1,
+                    role: "ai",
+                    content: "⚠️ Có lỗi kết nối, vui lòng thử lại sau nhé! 😊",
+                },
+            ])
         } finally {
             setIsLoading(false)
         }
     }
 
     return (
-        <div className={`chatbox-wrapper ${isExpanded ? 'is-open' : 'is-closed'}`}>
-            {/* Nút Launcher */}
-            <button className="chat-launcher" onClick={() => setIsExpanded(true)}>
-                <span className="icon">💬</span>
+        <>
+            <button
+                className="chatbot-toggler"
+                onClick={() => setIsExpanded(!isExpanded)}
+                aria-label={isExpanded ? "Đóng chat" : "Mở chat"}
+            >
+                <span className="material-symbols-rounded">mode_comment</span>
+                <span className="material-symbols-rounded">close</span>
             </button>
 
-            {/* Container Chat */}
-            <div className="chatbox-container">
-                <div className="chatbox-header">
-                    <div className="chatbox-title">MAY É BOT 🌿</div>
-                    <div className="header-actions">
-                        <button className="chatbox-action-btn" onClick={() => setMessages([])} title="Xóa lịch sử">🗑️</button>
-                        <button className="chatbox-toggle-btn" onClick={() => setIsExpanded(false)} title="Thu gọn">✕</button>
+            <div className={`chatbot-popup ${isExpanded ? "show" : ""}`}>
+                {/* Chat Header */}
+                <div className="chat-header">
+                    <div className="header-info">
+                        <div className="chatbot-logo">🌿</div>
+                        <h2 className="logo-text">May É Bot</h2>
                     </div>
+                    <button id="close-chatbot" onClick={() => setIsExpanded(false)} title="Đóng" aria-label="Đóng chat">
+                        <span className="material-symbols-rounded">keyboard_arrow_down</span>
+                    </button>
                 </div>
 
-                <div className="chatbox-messages">
+                {/* Chat Body */}
+                <div className="chat-body" ref={chatBodyRef}>
                     {messages.map((msg) => (
-                        <div key={msg.id} className={`message message-${msg.role}`}>
+                        <div key={msg.id} className={`message ${msg.role}-message`}>
+                            {msg.role === "ai" && <div className="bot-avatar">🤖</div>}
                             <div className="message-bubble">
-                                {msg.role === 'ai' ? (
+                                <div className="message-text">
                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
-                                ) : (
-                                    <span>{msg.content}</span>
-                                )}
-                                {msg.image && <img src={msg.image} alt="uploaded" className="message-image" />}
+                                </div>
+                                {msg.image && <img src={msg.image || "/placeholder.svg"} alt="uploaded" className="message-image" />}
                             </div>
                         </div>
                     ))}
 
                     {isLoading && (
-                        <div className="message message-ai">
-                            <div className="message-bubble typing-indicator">
-                                <span>.</span><span>.</span><span>.</span>
+                        <div className="message ai-message">
+                            <div className="bot-avatar">🤖</div>
+                            <div className="message-bubble">
+                                <div className="thinking-indicator">
+                                    <span className="dot"></span>
+                                    <span className="dot"></span>
+                                    <span className="dot"></span>
+                                </div>
                             </div>
                         </div>
                     )}
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Form Input */}
-                <form className="chatbox-input-form" onSubmit={handleSendMessage}>
-                    {selectedImage && (
-                        <div className="image-preview-container">
-                            <img src={selectedImage} alt="Preview" className="image-preview" />
-                            <button type="button" className="remove-image-btn" onClick={() => setSelectedImage(null)}>×</button>
-                        </div>
-                    )}
+                {/* Chat Footer */}
+                <div className="chat-footer">
+                    <form className="chat-form" onSubmit={handleSendMessage}>
+                        {selectedImage && (
+                            <div className="image-preview-container">
+                                <img src={selectedImage || "/placeholder.svg"} alt="Preview" className="image-preview" />
+                                <button type="button" className="remove-image-btn" onClick={() => setSelectedImage(null)}>
+                                    ×
+                                </button>
+                            </div>
+                        )}
 
-                    <div className="input-actions">
-                        <button type="button" className="upload-btn" onClick={() => fileInputRef.current?.click()} title="Gửi ảnh">
-                            📷
-                        </button>
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            hidden
-                            accept="image/*"
-                            onChange={handleFileSelect}
-                        />
-
-                        <input
-                            type="text"
+                        <textarea
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="Nhập câu hỏi..."
                             className="message-input"
                             disabled={isLoading}
+                            rows={1}
                         />
-                        <button type="submit" className="send-btn" disabled={isLoading || (!input && !selectedImage)}>
-                            ➤
-                        </button>
-                    </div>
-                </form>
+
+                        <div className="chat-controls">
+                            <button
+                                type="button"
+                                className="control-btn upload-btn"
+                                onClick={() => fileInputRef.current?.click()}
+                                title="Gửi ảnh"
+                            >
+                                📷
+                            </button>
+                            <input ref={fileInputRef} type="file" hidden accept="image/*" onChange={handleFileSelect} />
+
+                            <button
+                                type="submit"
+                                className="control-btn send-btn"
+                                disabled={isLoading || (!input.trim() && !selectedImage)}
+                                title="Gửi"
+                            >
+                                <span className="material-symbols-rounded">arrow_upward</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
