@@ -9,6 +9,7 @@ import { getToken } from "./utils/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import ProtectedRoute from "./routes/ProtectedRoute";
 // import PrivateRoute from "./routes/PrivateRoute";
+import ViewProduct from "./pages/products/ViewProduct";
 import PublicRoute from "./routes/PublicRoute";
 import ProfilePage from "./pages/profile/ProfilePage";
 function App() {
@@ -27,6 +28,8 @@ function App() {
                             </PublicRoute>
                         }
                     />
+                    <Route path="/products" element={<ViewProduct />} />
+
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/" element={<Navigate to={token ? "/home" : "/login"} replace />} />
                     <Route path="*" element={<Navigate to="/" replace />} />

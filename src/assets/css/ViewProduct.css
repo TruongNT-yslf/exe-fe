@@ -1,0 +1,137 @@
+
+
+.filter-box {
+    background: #fff;
+}
+
+.product-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.img-wrapper img {
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.1);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 12px;
+}
+
+.product-title {
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 40px;
+}
+
+.price-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 13px;
+}
+
+.new-price {
+    color: #e53935;
+    font-weight: bold;
+}
+.skeleton-img {
+    height: 220px;
+    background: #e0e0e0;
+    border-radius: 8px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-text {
+    height: 14px;
+    background: #e0e0e0;
+    border-radius: 6px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+.price-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 13px;
+}
+
+.new-price {
+    color: #e53935;
+    font-weight: 600;
+}
+.form-range::-webkit-slider-thumb {
+    background-color: #198754;
+    border: none;
+}
+
+
+.form-range::-moz-range-thumb {
+    background-color: #198754;
+    border: none;
+}
+
+
+.form-range::-webkit-slider-thumb:hover {
+    background-color: #157347;
+}
+
+/* Màu chữ & viền */
+.pagination .page-link {
+    color: #6f4e37;           /* nâu cà phê */
+    border-color: #6f4e37;
+}
+
+/* Hover */
+.pagination .page-link:hover {
+    background-color: #6f4e37;
+    color: #fff;
+}
+
+/* Trang đang active */
+.pagination .page-item.active .page-link {
+    background-color: #6f4e37;
+    border-color: #6f4e37;
+    color: #fff;
+}
+
+/* Disabled */
+.pagination .page-item.disabled .page-link {
+    color: #c0a08a;
+    border-color: #c0a08a;
+}

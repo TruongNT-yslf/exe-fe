@@ -46,3 +46,41 @@
     line-height: 1.2em;
 }
 
+.hero-section {
+    background: url("https://treladatthanh.com/admin_assets/source/tin-tuc/may-tre-dan-la-gi.jpg");
+    background-size: cover;
+    background-position: center;
+    padding: 120px 20px;
+    color: white;
+}
+
+.category-section {
+    padding: 60px 0;
+    background: #f8f9fa;
+}
+
+.category-card {
+    height: 180px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: white;
+    border: none;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+}
+
+.category-card h5 {
+    font-weight: bold;
+}
+
+.category-card p {
+    font-size: 14px;
+    color: #555;
+}
+
+

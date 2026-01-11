@@ -49,10 +49,10 @@ export default function Header() {
             expand="lg"
             fixed="top"
             className="shadow-sm"
-            style={{backgroundColor: '#ece4c3'}}
+            style={{backgroundColor: '#EBDCC5'}}
         >
             <Container>
-                <Navbar.Brand href="/" className="fw-bold" style={{color: '#7fa643'}}>
+                <Navbar.Brand href="/" className="fw-bold" style={{color: '#A6C48A'}}>
                     MAYÉ
                 </Navbar.Brand>
                 <Navbar.Toggle/>
@@ -63,7 +63,7 @@ export default function Header() {
                         {user ? (
                             <div className="d-flex align-items-center">
                                 <NavDropdown
-                                    title={<span className="fw-bold" style={{color: '#7fa643'}}>{user.username}</span>}
+                                    title={<span className="fw-bold" style={{color: '#A6C48A'}}>{user.username}</span>}
                                     id="user-dropdown"
                                     align="end"
                                 >

@@ -1,11 +1,72 @@
-/* Footer.css */
-.footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    background-color: #ece4c3;
-    color: black;
-    text-align: center;
-    padding: 1rem 0;
-    margin-top: auto;
+.site-footer {
+    background: #1f1f1f;
+    color: #ccc;
+    padding: 40px 20px 20px;
+    font-size: 14px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 30px;
+}
+
+.footer-col h4 {
+    color: #fff;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col li {
+    margin-bottom: 8px;
+}
+
+.footer-col a {
+    color: #aaa;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.footer-col a:hover {
+    color: #fff;
+}
+
+.footer-logo {
+    height: 40px;
+    margin-bottom: 12px;
+}
+
+.footer-desc {
+    color: #aaa;
+    line-height: 1.5;
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 30px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-legal a {
+    margin-left: 15px;
+    color: #aaa;
+    text-decoration: none;
+}
+
+.footer-legal a:hover {
+    color: #fff;
 }
