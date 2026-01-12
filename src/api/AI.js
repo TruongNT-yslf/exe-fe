@@ -8,6 +8,11 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:808
  * @param {Array} chatHistory - Previous chat messages (optional)
  * @returns {Promise<string>} - AI response text
  */
+// api/AI.js
+
+// Đảm bảo bạn đã khai báo BACKEND_URL ở đâu đó hoặc import vào
+// const BACKEND_URL = "http://localhost:8080"; // Ví dụ
+
 export async function askAI({ question, image, chatHistory = [] }) {
     try {
         console.log("Calling AI API with question:", question.substring(0, 50))
@@ -34,14 +39,28 @@ export async function askAI({ question, image, chatHistory = [] }) {
             throw new Error(`Server error: ${response.status}`)
         }
 
-        const answer = await response.text()
-        console.log("Received answer:", answer.substring(0, 100))
+        // --- PHẦN SỬA ĐỔI QUAN TRỌNG ---
+        // Kiểm tra xem server có trả về JSON không
+        const contentType = response.headers.get("content-type");
 
-        return answer
+        let answer;
+        if (contentType && contentType.includes("application/json")) {
+            // Nếu là JSON, parse ra Object
+            answer = await response.json();
+            // console.log("Received JSON answer:", answer);
+        } else {
+            // Nếu là text thường, lấy text
+            answer = await response.text();
+            console.log("Received text answer:", answer.substring(0, 100));
+        }
+
+        return answer;
+        // Kết quả trả về sẽ là Object: { answer: "...", status: "success", ... }
+        // --------------------------------
+
     } catch (error) {
         console.error("API call failed:", error.message)
         throw new Error(`Không thể kết nối đến backend: ${error.message}`)
     }
 }
-
 

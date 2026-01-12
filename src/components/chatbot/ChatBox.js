@@ -1,12 +1,14 @@
 "use client"
 import { useState, useEffect, useRef } from "react"
+// import type React from "react" // Đã xóa dòng này vì JS không cần import type
 import "./ChatBox.css"
 import { askAI } from "../../api/AI"
 import ReactMarkdown from "react-markdown"
 
+// Đã xóa Interface Message
+
 export default function ChatBox() {
     const [isExpanded, setIsExpanded] = useState(false)
-    // Khởi tạo state tin nhắn
     const [messages, setMessages] = useState([
         {
             id: 1,
@@ -57,7 +59,6 @@ export default function ChatBox() {
             image: selectedImage,
         }
 
-        // Chuẩn bị lịch sử chat cho backend
         const historyForBackend = messages.map((msg) => ({
             role: msg.role === "user" ? "user" : "model",
             content: msg.content,
@@ -77,7 +78,6 @@ export default function ChatBox() {
 
             let aiResponse = ""
 
-            // Xử lý các dạng phản hồi khác nhau từ API
             if (typeof response === "string") {
                 aiResponse = response
             } else if (response && typeof response === "object" && "answer" in response) {

@@ -58,7 +58,7 @@
     right: 35px;
     bottom: 100px;
     width: 420px;
-    height: 600px;
+    height: 510px;
     overflow: hidden;
     background: #fff;
     border-radius: 15px;
@@ -439,4 +439,46 @@
     .message-bubble {
         max-width: 85%;
     }
+}
+
+
+/* Thu hẹp khoảng cách padding của footer */
+.chat-footer {
+    padding: 10px 15px 15px; /* Giảm padding */
+    background: #fff;
+    border-top: 1px solid #f0f0f8;
+}
+
+/* Chuyển form thành hàng ngang */
+.chat-form {
+    display: flex;
+    flex-direction: row; /* Quan trọng: Đưa về hàng ngang */
+    align-items: flex-end; /* Căn các nút bấm xuống đáy khi textarea dãn dòng */
+    gap: 8px;
+    background: #fff;
+}
+
+/* Tối ưu lại ô nhập liệu */
+.message-input {
+    flex: 1; /* Để textarea chiếm hết không gian còn lại */
+    width: auto; /* Bỏ width 100% */
+    min-height: 40px;
+    max-height: 100px;
+    padding: 10px 14px;
+    border: 1px solid #e0e0f0;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* Căn chỉnh cụm nút bấm */
+.chat-controls {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 2px; /* Căn chỉnh nhẹ để khớp với đáy textarea */
+}
+
+.control-btn {
+    height: 36px; /* Giảm nhẹ kích thước nút */
+    width: 36px;
+    font-size: 1rem;
 }
