@@ -2,7 +2,7 @@ import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import React, {useContext} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from "../context/AuthContext";
-
+import Logo from "../assets/images/LOGO EXE.png";
 export default function Header() {
     const navigate = useNavigate();
     const {user, logout} = useContext(AuthContext);
@@ -48,16 +48,37 @@ export default function Header() {
         <Navbar
             expand="lg"
             fixed="top"
-            className="shadow-sm"
+            className="shadow-sm py-0"
             style={{backgroundColor: '#EBDCC5'}}
         >
             <Container>
-                <Navbar.Brand href="/" className="fw-bold" style={{color: '#A6C48A'}}>
-                    MAYÉ
+                <Navbar.Brand href="/" className="p-0 d-flex align-items-center">
+                    <img
+                        src={Logo}
+                        style={{
+                            height: '100%',
+                            maxHeight: '60px',
+                            width: 'auto',
+                            objectFit: 'contain'
+                        }}
+                        alt="MAYÉ"
+                    />
+                    <span
+                        className="fw-bold ms-2"
+                        style={{
+                            color: '#A6C48A',
+                            fontSize: '2.1rem',
+                            lineHeight: '1',
+                            display: 'inline-block',
+                            transform: 'scaleY(1.2)'
+                        }}
+                    >
+        MAYÉ
+    </span>
                 </Navbar.Brand>
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
-                    <Nav className="ms-auto align-items-center">
+                    <Nav className="ms-auto align-items-center p-0">
                         <Nav.Link href="/">HomePage</Nav.Link>
                         {renderServiceDropdown()}
                         {user ? (

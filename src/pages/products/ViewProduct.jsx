@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import api from "../../api/api";
 import {
     Container,
     Row,
@@ -55,7 +56,7 @@ function ViewProduct() {
     ) => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:8080/api/products/view", {
+            const res = await api.get("http://localhost:8080/api/products/view", {
                 params: {
                     keyword: search,
                     categoryId: category,
@@ -64,8 +65,7 @@ function ViewProduct() {
                     page: currentPage,
                     size,
                     sort: sortValue
-                },
-                headers: {Authorization: `Bearer ${token}`}
+                }
             });
 
             setProducts(res.data.data.content || []);
@@ -79,9 +79,7 @@ function ViewProduct() {
     };
 
     const fetchCategories = () => {
-        axios.get("http://localhost:8080/api/categories", {
-            headers: {Authorization: `Bearer ${token}`}
-        })
+        api.get("http://localhost:8080/api/categories")
             .then(res => setCategories(res.data.data || []))
             .catch(err => console.error(err));
     };

@@ -54,33 +54,140 @@
     color: white;
 }
 
-.category-section {
-    padding: 60px 0;
-    background: #f8f9fa;
+
+/* Khung chứa ảnh cố định chiều cao */
+.category-img-container {
+    height: 450px;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Ảnh tràn toàn bộ khung và không bị méo */
+.category-img {
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover; /* Quan trọng nhất để ảnh tràn đều */
+    transition: transform 0.5s ease;
+}
+
+/* Lớp phủ đen mờ để chữ dễ đọc hơn */
+.category-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+    transition: background 0.3s ease;
+}
+
+/* Hiệu ứng khi di chuột vào thẻ */
 .category-card {
-    height: 180px;
-    border-radius: 16px;
     cursor: pointer;
-    transition: 0.3s;
-    background: white;
-    border: none;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    border-radius: 15px !important;
 }
 
-.category-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+.category-card:hover .category-img {
+    transform: scale(1.1); /* Phóng to ảnh nhẹ */
 }
 
-.category-card h5 {
-    font-weight: bold;
+.category-card:hover .category-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 100%);
 }
 
-.category-card p {
-    font-size: 14px;
-    color: #555;
+/* Căn chỉnh chữ trong card */
+.card-title {
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+/*.hero-section {*/
+/*    min-height: 100vh;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));*/
+/*    color: #ffffff;*/
+/*    padding: 20px;*/
+/*    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);*/
+/*}*/
+
+/*.hero-section h1, .hero-section p {*/
+/*    animation: fadeInUp 1.2s ease-out;*/
+/*}*/
+
+/*@keyframes fadeInUp {*/
+/*    from {*/
+/*        opacity: 0;*/
+/*        transform: translateY(30px);*/
+/*    }*/
+/*    to {*/
+/*        opacity: 1;*/
+/*        transform: translateY(0);*/
+/*    }*/
+/*}*/
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Loại bỏ dòng background linear-gradient ở đây */
+    color: #ffffff;
+    padding: 20px;
+    /* Giữ đổ bóng chữ để chữ vẫn đọc được trên nền ảnh không có lớp phủ */
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Animation chỉ dành cho chữ, không ảnh hưởng đến ảnh nền */
+.hero-section h1, .hero-section p {
+    animation: fadeInUp 1.2s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar-nav .nav-link {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 
+.navbar-nav .nav-item.dropdown {
+    padding: 0 !important;
+}
+
+
+.navbar-nav .btn {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.section-title {
+    position: relative;
+    color: #5d4037; /* Màu nâu cafe đậm */
+    font-family: 'Playfair Display', serif; /* Font có chân sang trọng */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding-bottom: 20px;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: #bc8f8f; /* Màu gỗ nhạt */
+    border-radius: 10px;
+    /* Tạo hiệu ứng nan tre đan */
+    background-image: linear-gradient(90deg, transparent 50%, #fff 50%);
+    background-size: 10px 100%;
+}

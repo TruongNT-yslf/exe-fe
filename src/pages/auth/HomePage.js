@@ -5,6 +5,7 @@ import { Container, Row, Col, Button, Navbar, Nav, Card } from "react-bootstrap"
 import { AuthContext } from "../../context/AuthContext";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import BG from "../../assets/images/homebg.jpg";
 import "../../assets/css/Home.css";
 import axios from "axios";
 import ChatBox from "../../components/chatbot/ChatBox";
@@ -34,43 +35,68 @@ function HomePage() {
         <>
             <Header />
 
-
-            <section className="hero-section text-center">
-                <h1>Mây Tre Đan Việt Nam</h1>
-                <p>Thủ công – Tự nhiên – Bền vững</p>
+            <section
+                className="hero-section text-center"
+                style={{
+                    marginTop: '100px',
+                    backgroundImage: `url(${BG})`,
+                    backgroundPosition: 'top center',
+                    backgroundSize: '100% auto',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            >
+                {/* Nội dung bên trong */}
             </section>
 
             {/* CATEGORY GRID */}
             <section className="category-section">
-                <Container>
-                    <h2 className="text-center fw-bold mb-4">Danh mục sản phẩm</h2>
-
+                <Container className="py-5">
+                    <h2 className="text-center fw-bold mb-5 section-title">
+                        Danh mục sản phẩm
+                    </h2>
                     <Row className="g-4">
                         {categories.map(cat => (
-                            <Col md={3} key={cat.id}>
+                            <Col lg={3} md={4} sm={6} key={cat.id}>
                                 <Card
-                                    className="category-card"
+                                    className="category-card border-0 text-white shadow-sm overflow-hidden"
                                     onClick={() => navigate(`/products?categoryId=${cat.id}`)}
                                 >
-                                    <Card.Body>
-                                        <h5>{cat.name}</h5>
-                                        <p>{cat.description}</p>
-                                    </Card.Body>
+                                    <div className="category-img-container">
+                                        <Card.Img
+                                            src={cat.picture}
+                                            alt={cat.name}
+                                            className="category-img"
+                                        />
+                                        <Card.ImgOverlay className="d-flex flex-column justify-content-end align-items-center  pb-4 category-overlay">
+                                            <Card.Title className="fw-bold fs-4 mb-1">{cat.name}</Card.Title>
+                                            <Card.Text className="small opacity-75">
+                                                {cat.description}
+                                            </Card.Text>
+                                        </Card.ImgOverlay>
+                                    </div>
                                 </Card>
                             </Col>
                         ))}
 
-                        {/* VIEW ALL */}
-                        <Col md={3}>
+                        {/* Card VIEW ALL */}
+                        <Col lg={3} md={4} sm={6}>
                             <Card
-                                className="category-card view-all"
+                                className="category-card border-0 text-white shadow-sm overflow-hidden"
                                 onClick={() => navigate("/products")}
                             >
-                                <Card.Body>
-                                    <h5>Xem tất cả</h5>
-                                    <p>Toàn bộ sản phẩm mây tre</p>
-                                    <Button variant="dark">View All</Button>
-                                </Card.Body>
+                                <div className="category-img-container">
+                                    <Card.Img
+                                        src="https://i.pinimg.com/736x/39/42/06/3942068c0153280a4b88c5b09ced6ffd.jpg"
+                                        className="category-img"
+                                    />
+                                    <Card.ImgOverlay className="d-flex flex-column align-items-center justify-content-center text-center category-overlay">
+                                        <h3 className="fw-bold">Xem tất cả</h3>
+                                        <p className="small mb-3">Toàn bộ sản phẩm mây tre</p>
+                                        <Button variant="light" size="sm" className="rounded-pill px-4 fw-bold">
+                                            Khám phá ngay
+                                        </Button>
+                                    </Card.ImgOverlay>
+                                </div>
                             </Card>
                         </Col>
                     </Row>
@@ -152,7 +178,7 @@ function HomePage() {
                     </Container>
                 </section>
             ) : null}
-
+            < ChatBox/>
             <Footer />
         </>
     );
