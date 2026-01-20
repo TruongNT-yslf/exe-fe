@@ -126,7 +126,10 @@ export default function ChatBox() {
                 {/* Chat Header */}
                 <div className="chat-header">
                     <div className="header-info">
-                        <div className="chatbot-logo">🐼</div>
+                        <div className="chatbot-logo">
+                            <img src="/static/media/LOGO EXE.0c423b67095392a8bd7a.png"
+                                                           style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}}/>
+                        </div>
                         <h2 className="logo-text">MAYÉ</h2>
                     </div>
                     <button id="close-chatbot" onClick={() => setIsExpanded(false)} title="Đóng" aria-label="Đóng chat">
@@ -138,7 +141,10 @@ export default function ChatBox() {
                 <div className="chat-body" ref={chatBodyRef}>
                     {messages.map((msg) => (
                         <div key={msg.id} className={`message ${msg.role}-message`}>
-                            {msg.role === "ai" && <div className="bot-avatar">🐼</div>}
+                            {msg.role === "ai" && <div className="bot-avatar">
+                                <img src="/static/media/LOGO EXE.0c423b67095392a8bd7a.png"
+                                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}}/>
+                            </div>}
                             <div className="message-bubble">
                                 <div className="message-text">
                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -150,7 +156,10 @@ export default function ChatBox() {
 
                     {isLoading && (
                         <div className="message ai-message">
-                            <div className="bot-avatar">🤖</div>
+                            <div className="bot-avatar">
+                                <img src="/static/media/LOGO EXE.0c423b67095392a8bd7a.png"
+                                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}}/>
+                            </div>
                             <div className="message-bubble">
                                 <div className="thinking-indicator">
                                     <span className="dot"></span>

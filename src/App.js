@@ -13,6 +13,8 @@ import ViewProduct from "./pages/products/ViewProduct";
 import PublicRoute from "./routes/PublicRoute";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ProductDetails from "./pages/products/ProductDetails";
+import BlogDetail from "./pages/blog/BlogDetail";
+import BlogAdmin from "./components/blog/BlogAdmin";
 function App() {
     const token = getToken();
     return (
@@ -33,6 +35,7 @@ function App() {
                     <Route path="/products/:id" element={<ProductDetails />} />
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/" element={<Navigate to={token ? "/home" : "/login"} replace />} />
+                    <Route path="/blog/:id" element={<BlogDetail/>} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                     <Route path="/logout" element={<Logout />} />
 
@@ -42,6 +45,7 @@ function App() {
                     {/* STAFF routes */}
 
                     {/* ADMIN routes */}
+                    <Route path="/admin/blog" element={<BlogAdmin/>} />
 
                 </Routes>
             </Router>

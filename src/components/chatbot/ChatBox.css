@@ -20,15 +20,17 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+    /* Đổi sang màu Nâu gỗ thương hiệu */
+    background: #8D6E63;
+    box-shadow: 0 4px 15px rgba(141, 110, 99, 0.4);
     transition: all 0.3s ease;
     z-index: 999;
 }
 
 .chatbot-toggler:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+    background: #6D4C41; /* Nâu đậm hơn khi hover */
+    box-shadow: 0 6px 20px rgba(141, 110, 99, 0.6);
 }
 
 .chatbot-toggler span {
@@ -84,7 +86,7 @@
     display: flex;
     align-items: center;
     padding: 15px 22px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #8D6E63; /* Màu nâu đồng nhất */
     justify-content: space-between;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -193,9 +195,9 @@
     align-items: center;
     justify-content: center;
     font-size: 1.3rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: rgb(235, 220, 197); /* Màu kem đậm */
+    color: #5D4037;
     border-radius: 50%;
-    color: #fff;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
@@ -227,12 +229,13 @@
 
 .ai-message .message-text strong {
     font-weight: 600;
-    color: #667eea;
+    color: #8D6E63; /* Đổi màu nhấn của AI sang nâu */
 }
 
 .user-message .message-text {
     color: #fff;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Đổi từ tím sang màu Nâu phối với màu chữ trắng */
+    background: #9E8279;
     border-radius: 13px 13px 3px 13px;
 }
 
@@ -255,7 +258,7 @@
     width: 8px;
     opacity: 0.7;
     border-radius: 50%;
-    background: #667eea;
+    background: #8D6E63;
     animation: dotPulse 1.8s ease-in-out infinite;
 }
 
@@ -359,8 +362,8 @@
 }
 
 .message-input:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #8D6E63;
+    box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.1);
 }
 
 .message-input:disabled {
@@ -381,7 +384,6 @@
     cursor: pointer;
     border-radius: 50%;
     background: #f5f5ff;
-    color: #667eea;
     font-size: 1.1rem;
     transition: all 0.2s ease;
     display: flex;
@@ -391,7 +393,8 @@
 }
 
 .control-btn:hover {
-    background: #e8e8ff;
+    background: #EFEBE9;
+    color: #8D6E63;
     transform: scale(1.05);
 }
 
@@ -402,12 +405,12 @@
 }
 
 .send-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #916c60;
     color: #fff;
 }
 
 .send-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, #5568d3 0%, #6a3d94 100%);
+    background: #6D4C41; /* Nâu đậm khi hover */
     transform: scale(1.1);
 }
 
