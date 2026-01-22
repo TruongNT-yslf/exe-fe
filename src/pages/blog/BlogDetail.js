@@ -22,7 +22,9 @@ export default function BlogDetail() {
         try {
             setLoading(true);
             const response = await getBlogById(id);
-            setPost(response.data);
+
+            setPost(response.data.data);
+
             setActiveImageIndex(0);
         } catch (err) {
             setError("Không tìm thấy bài viết");
@@ -33,13 +35,6 @@ export default function BlogDetail() {
     };
 
 
-    const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('vi-VN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
 
     const handlePrevImage = () => {
         if (post?.galleryImages && post.galleryImages.length > 0) {
@@ -97,9 +92,6 @@ export default function BlogDetail() {
             <article className="blog-detail">
                 <header className="blog-detail-header">
                     <h1 className="blog-detail-title">{post.title}</h1>
-                    <div className="blog-detail-meta">
-                        <span className="blog-detail-date">{formatDate(post.createdAt)}</span>
-                    </div>
                 </header>
 
                 {post.galleryImages && post.galleryImages.length > 0 && (

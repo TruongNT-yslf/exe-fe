@@ -1,5 +1,6 @@
 import api from "./api";
 
+export const getBlogs = api.get("/blog")
 
 // Lấy bài viết theo id
 export const getBlogById = (id) => api.get(`/blog/${id}`);

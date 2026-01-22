@@ -1,8 +1,8 @@
-'use client';
+    'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import './BlogAdmin.css';
-import { createBlog, updateBlog, deleteBlog, getBlogById } from '../../api/Blog';
+import {createBlog, updateBlog, deleteBlog, getBlogById, getBlogs} from '../../api/Blog';
 import api from '../../api/api';
 
 export default function BlogAdmin() {
@@ -39,7 +39,7 @@ export default function BlogAdmin() {
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            const res = await api.get('/blog');
+            const res = await getBlogs;
             setPosts(res.data.data || []);
         } catch (e) {
             setError('Không tải được danh sách bài viết');
