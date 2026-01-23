@@ -106,6 +106,9 @@ export default function ProfilePage() {
             if (updatedData.success === false) {
                 alert(updatedData.message);
             } else {
+                await updateUserProfile(payload);
+                const freshUser = await fetchUserProfile();
+                setUser(freshUser);
                 alert("Cập nhật thành công");
             }
         } catch (e) {

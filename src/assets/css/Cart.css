@@ -1,0 +1,124 @@
+.cart-page-wrapper {
+    background-color: #fcfbf7; /* Nền kem nhẹ phù hợp đồ mây tre */
+    min-height: 100vh;
+}
+
+.header-spacer {
+    height: 100px;
+}
+
+.green-line {
+    width: 60px;
+    height: 4px;
+    background-color: #2e7d32;
+    margin-top: 10px;
+    border-radius: 2px;
+}
+
+/* Table styling */
+.product-img-cart {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    background-color: #f8f8f8;
+}
+
+.product-name-link {
+    font-size: 1rem;
+    color: #333;
+    max-width: 250px;
+    display: block;
+}
+
+/* Quantity Control */
+.cart-qty-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    width: fit-content;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cart-qty-control button {
+    background: #fdfdfd;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    color: #2e7d32;
+    transition: all 0.2s;
+}
+
+.cart-qty-control button:hover:not(:disabled) {
+    background: #2e7d32;
+    color: white;
+}
+
+.cart-qty-control input {
+    width: 40px;
+    border: none;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* Row updating effect */
+.row-updating {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Buttons */
+.btn-remove {
+    background: none;
+    border: none;
+    color: #ccc;
+    padding: 8px;
+    transition: 0.3s;
+}
+
+.btn-remove:hover {
+    color: #dc3545;
+    background-color: #fff5f5;
+    border-radius: 50%;
+}
+
+.summary-card {
+    position: sticky;
+    top: 120px;
+    background-color: #ffffff;
+}
+
+.shadow-green {
+    box-shadow: 0 10px 25px rgba(46, 125, 50, 0.2);
+}
+
+.checkout-btn {
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.checkout-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(46, 125, 50, 0.3);
+}
+
+.cart-loading-state {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .product-img-cart {
+        width: 60px;
+        height: 60px;
+    }
+}

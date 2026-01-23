@@ -125,7 +125,7 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import Logo from "../assets/images/LOGO EXE.png";
 import "../assets/css/Header.css";
-
+import { FaShoppingCart } from 'react-icons/fa';
 export default function Header() {
     const navigate = useNavigate();
     const { user, logout } = useContext(AuthContext);
@@ -149,7 +149,7 @@ export default function Header() {
             expand="lg"
             fixed="top"
             className="custom-navbar shadow-sm p-0"
-            style={{ backgroundColor: '#EBDCC5' }}
+            style={{ backgroundColor: '#fdfaf7' }}
         >
             <Container fluid className="px-4">
                 <Navbar.Brand as={Link} to="/" className="d-flex align-items-center py-1">
@@ -162,7 +162,7 @@ export default function Header() {
                         <span className="fw-bold" style={{ color: '#A6C48A', fontSize: '2.6rem', letterSpacing: '-1px' }}>
                             MAYÉ
                         </span>
-                        <small className="fw-bold" style={{ color: '#888', fontSize: '0.65rem', letterSpacing: '3px', textAlign: 'center' }}>
+                        <small className="fw-bold" style={{ color: '#888', fontSize: '0.65rem', letterSpacing: '3px', textAlign: 'center', marginLeft:'5px'}}>
                             NHÀ MÂY TRE
                         </small>
                     </div>
@@ -191,22 +191,34 @@ export default function Header() {
 
                         <div className="ms-lg-3 d-flex align-items-center">
                             {user ? (
-                                <NavDropdown
-                                    title={<span className="fw-bold" style={{color: '#A6C48A'}}>{user.username}</span>}
-                                    id="user-drop"
-                                    align="end"
-                                    show={showUser}
-                                    onMouseEnter={() => setShowUser(true)}
-                                    onMouseLeave={() => setShowUser(false)}
-                                >
-                                    <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item onClick={handleLogout} className="text-danger">Logout</NavDropdown.Item>
-                                </NavDropdown>
+                                <>
+                                    <NavDropdown
+                                        title={<span className="fw-bold" style={{color: '#A6C48A'}}>{user.username}</span>}
+                                        id="user-drop"
+                                        align="end"
+                                        show={showUser}
+                                        onMouseEnter={() => setShowUser(true)}
+                                        onMouseLeave={() => setShowUser(false)}
+                                    >
+                                        <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item onClick={handleLogout} className="text-danger">Logout</NavDropdown.Item>
+                                    </NavDropdown>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/cart"
+                                        className="cart-icon-wrapper me-3 position-relative"
+                                        style={{ color: '#2e7d32' }}
+                                    >
+                                        <FaShoppingCart size={22} />
+                                        <span className="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        </span>
+                                    </Nav.Link>
+                                </>
                             ) : (
                                 <Button
                                     variant="success"
-                                    className="rounded-0 px-4 py-2" // Nút bấm vuông vức hơn để hợp với style cao cấp
+                                    className="rounded-0 px-4 py-2"
                                     onClick={() => navigate("/login")}
                                     style={{ backgroundColor: '#A6C48A', border: 'none', fontWeight: 'bold' }}
                                 >

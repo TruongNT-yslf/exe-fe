@@ -57,3 +57,27 @@
 .dropdown-toggle::after {
     display: none;
 }
+
+
+.cart-icon-wrapper {
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.cart-icon-wrapper:hover {
+    transform: scale(1.1);
+    color: #8d6e63 !important; /* Đổi sang màu nâu gỗ khi hover */
+}
+
+.cart-badge {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+    border: 2px solid white; /* Tạo viền trắng để nổi bật trên nền Navbar */
+}
+
+/* Ẩn badge nếu số lượng là 0 (Tùy chọn) */
+.cart-badge:empty {
+    display: none;
+}
