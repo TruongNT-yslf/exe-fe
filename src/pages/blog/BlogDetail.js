@@ -19,11 +19,10 @@ export default function BlogDetail() {
             try {
                 setLoading(true);
                 const response = await getBlogById(id);
-                console.log('[v0] Blog detail loaded:', response.data.data);
                 setBlog(response.data.data);
                 setSelectedImage(response.data.data?.galleryImages?.[0] || null);
             } catch (err) {
-                console.error('[v0] Error fetching blog:', err);
+                console.error('Error fetching blog:', err);
                 setError('Không thể tải bài viết');
             } finally {
                 setLoading(false);
@@ -38,7 +37,7 @@ export default function BlogDetail() {
                     .slice(0, 3) || [];
                 setRelatedBlogs(filtered);
             } catch (err) {
-                console.error('[v0] Error fetching related blogs:', err);
+                console.error('Error fetching related blogs:', err);
             }
         };
 
@@ -65,7 +64,7 @@ export default function BlogDetail() {
                 <div className="blog-detail-error-content">
                     <p className="blog-detail-error-message">{error || 'Bài viết không tồn tại'}</p>
                     <Link
-                        to="/blog"
+                        to="/blogs"
                         className="blog-detail-error-link"
                     >
                         Quay lại danh sách
@@ -79,7 +78,7 @@ export default function BlogDetail() {
         <div className="blog-detail-container">
             <div className="blog-detail-nav">
                 <div className="blog-detail-nav-wrapper">
-                    <Link to="/blog" className="blog-detail-nav-link">
+                    <Link to="/blogs" className="blog-detail-nav-link">
                         ← Quay lại danh sách
                     </Link>
                 </div>
@@ -143,9 +142,9 @@ export default function BlogDetail() {
                                 {relatedBlogs.map((relatedBlog) => (
                                     <Link key={relatedBlog.id} to={`/blog/${relatedBlog.id}`} className="blog-detail-related-card">
                                         <div className="blog-detail-related-card-image">
-                                            {relatedBlog.galleryImages && relatedBlog.galleryImages.length > 0 ? (
+                                            {relatedBlog.thumbnail ? (
                                                 <img
-                                                    src={relatedBlog.galleryImages[0]}
+                                                    src={relatedBlog.thumbnail}
                                                     alt={relatedBlog.title}
                                                     className="blog-detail-related-card-image-img"
                                                 />
