@@ -42,21 +42,22 @@ const AdminHeader = () => {
                 <Col className="text-end">
                     <div className="d-flex justify-content-end gap-2">
                         {!isAdminDashboard ? (
-                            <Button variant="outline-secondary" size="sm" onClick={() => navigate(-1)}>
-                                <ArrowReturnLeft className="me-1" size={14} />
-                                Trở về trang trước đó
-                            </Button>
+                            <>
+                                <Button variant="outline-secondary" size="sm" onClick={() => navigate(-1)}>
+                                    <ArrowReturnLeft className="me-1" size={14} />
+                                    Trở về trang trước đó
+                                </Button>
+                                {/* Nút trở về bảng điều khiển */}
+                                <Link to="/admin/dashboard">
+                                    <Button variant="outline-secondary" size="sm">
+                                        <Speedometer2 className="me-1" size={14} />
+                                        Bảng điều khiển
+                                    </Button>
+                                </Link>
+                            </>
                         ) : (
                             <></>
                         )}
-                        {/* Nút trở về bảng điều khiển */}
-                        <Link to="/admin/dashboard">
-                            <Button variant="outline-secondary" size="sm">
-                                <Speedometer2 className="me-1" size={14} />
-                                Bảng điều khiển
-                            </Button>
-                        </Link>
-
                         {/* Nút trở về trang chủ */}
                         <Link to="/">
                             <Button variant="outline-secondary" size="sm">
