@@ -9,6 +9,7 @@ import api from '../../api/api';
 // 1. Import React Quill và CSS của nó
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import AdminHeader from "../admin/AdminHeader";
 
 export default function BlogAdmin() {
     const [posts, setPosts] = useState([]);
@@ -204,6 +205,7 @@ export default function BlogAdmin() {
     return (
         <div className="blog-admin-container">
             {/* ... Header, Alert ... */}
+            <AdminHeader></AdminHeader>
             {error && <div className="alert alert-error">{error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 

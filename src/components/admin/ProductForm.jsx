@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import {useParams } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap';
-import productManagerApi from "../../../api/ProductManagerApi";
-import api from "../../../api/api";
-import AdminHeader from "../../../components/admin/AdminHeader";
+import productManagerApi from "../../api/ProductManagerApi";
+import { Link } from "react-router-dom";
+import api from "../../api/api";
+import {Pencil, Save} from "react-bootstrap-icons";
+import AdminHeader from "./AdminHeader";
 
-const AddNewProduct = () => {
+const ProductForm = ({ mode = 'view' }) => {
+    const { id } = useParams();
     const [product, setProduct] = useState({
         name: '',
         description: '',
@@ -23,28 +27,37 @@ const AddNewProduct = () => {
     const [uploadErrors, setUploadErrors] = useState({ thumbnail: '', gallery: '' });
     const [categories, setCategories] = useState([]);
     const [loadingCategories, setLoadingCategories] = useState(false);
-    //state cho thumbnail preview
     const [thumbnailPreview, setThumbnailPreview] = useState('');
-    //state cho gallery previews
     const [galleryPreviews, setGalleryPreviews] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const thumbnailInputRef = React.useRef(null);
     const galleryInputRef = React.useRef(null);
+
+    const isViewMode = mode === 'view';
+    const isEditMode = mode === 'edit';
+
     useEffect(() => {
         fetchCategories();
-    },[])
+
+        // Nếu là edit hoặc view mode, fetch product data
+        if ((isEditMode || isViewMode) && id) {
+            fetchProductData();
+        }
+    }, [id, mode]);
 
     // Thêm useEffect để cleanup
     useEffect(() => {
         return () => {
-            // Cleanup thumbnail preview URL
-            if (thumbnailPreview) {
+            if (thumbnailPreview && thumbnailPreview.startsWith('blob:')) {
                 URL.revokeObjectURL(thumbnailPreview);
             }
-
-            // Cleanup gallery preview URLs
             galleryPreviews.forEach(preview => {
-                URL.revokeObjectURL(preview);
+                if (preview.startsWith('blob:')) {
+                    URL.revokeObjectURL(preview);
+                }
             });
         };
     }, [thumbnailPreview, galleryPreviews]);
@@ -60,7 +73,45 @@ const AddNewProduct = () => {
         }
     };
 
+    const fetchProductData = async () => {
+        setIsLoading(true);
+        try {
+            const response = await productManagerApi.getProductById(id);
+            if (response.message === "success") {
+                const productData = response.data;
+                setProduct({
+                    name: productData.name || '',
+                    description: productData.description || '',
+                    originalPrice: productData.originalPrice || '',
+                    discountedPrice: productData.discountedPrice || '',
+                    thumbnail: productData.thumbnail || '',
+                    galleryImages: productData.galleryImages || [],
+                    featured: productData.featured || false,
+                    active: productData.active ?? true,
+                    categoryId: productData.categoryId || '',
+                    categoryName: productData.categoryName || ''
+                });
+
+                // Set previews
+                if (productData.thumbnail) {
+                    setThumbnailPreview(productData.thumbnail);
+                }
+
+                if (productData.galleryImages && productData.galleryImages.length > 0) {
+                    setGalleryPreviews(productData.galleryImages);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            setErrorMessage('Không thể tải thông tin sản phẩm');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const handleChange = (e) => {
+        if (isViewMode) return; // Không cho phép chỉnh sửa trong view mode
+
         const { name, value, type, checked } = e.target;
         setProduct(prev => ({
             ...prev,
@@ -68,8 +119,9 @@ const AddNewProduct = () => {
         }));
     };
 
-    // hàm xử lý upload thumbnail
     const handleThumbnailUpload = async (e) => {
+        if (isViewMode) return;
+
         const file = e.target.files[0];
         if (!file) return;
 
@@ -78,17 +130,14 @@ const AddNewProduct = () => {
 
         const data = new FormData();
         data.append('file', file);
-        data.append("folder", "products"); // Thay "blog" bằng "products" hoặc folder phù hợp
+        data.append("folder", "products");
 
         try {
             const response = await api.post('/media/upload', data);
             const result = response.data;
             const url = result.secure_url || result.url;
 
-            // Cập nhật thumbnail URL (không dùng base64 nữa)
             setProduct(prev => ({ ...prev, thumbnail: url }));
-
-            // Tạo preview từ URL
             setThumbnailPreview(url);
         } catch (err) {
             console.error("Thumbnail upload failed", err);
@@ -102,8 +151,9 @@ const AddNewProduct = () => {
         }
     };
 
-    // hàm xử lý thêm gallery images
     const handleGalleryImagesUpload = async (e) => {
+        if (isViewMode) return;
+
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
 
@@ -114,7 +164,6 @@ const AddNewProduct = () => {
         const previewUrls = [];
 
         try {
-            // Upload từng file và chờ tất cả hoàn thành
             for (const file of files) {
                 const data = new FormData();
                 data.append('file', file);
@@ -126,20 +175,17 @@ const AddNewProduct = () => {
                     const url = result.secure_url || result.url;
 
                     uploadedUrls.push(url);
-                    // Tạo preview URL từ file local (tạm thời) hoặc dùng URL từ server
                     previewUrls.push(URL.createObjectURL(file));
                 } catch (err) {
                     console.error("Gallery image upload failed", err);
                 }
             }
 
-            // Cập nhật state với tất cả URLs đã upload
             setProduct(prev => ({
                 ...prev,
                 galleryImages: [...prev.galleryImages, ...uploadedUrls]
             }));
 
-            // Cập nhật previews
             setGalleryPreviews(prev => [...prev, ...previewUrls]);
 
             if (uploadedUrls.length < files.length) {
@@ -160,64 +206,62 @@ const AddNewProduct = () => {
         }
     };
 
-    // Hàm xóa thumbnail
     const handleRemoveThumbnail = () => {
-        // Revoke object URL nếu là URL tạm thời
+        if (isViewMode) return;
+
         if (thumbnailPreview && thumbnailPreview.startsWith('blob:')) {
             URL.revokeObjectURL(thumbnailPreview);
         }
 
-        // Reset thumbnail và preview
         setProduct(prev => ({ ...prev, thumbnail: '' }));
         setThumbnailPreview('');
         setUploadErrors(prev => ({ ...prev, thumbnail: '' }));
 
-        // Reset input file
         if (thumbnailInputRef.current) {
             thumbnailInputRef.current.value = '';
         }
     };
 
-    // hàm xóa gallery image
     const handleRemoveGalleryImage = (index) => {
-        // Revoke object URL nếu là URL tạm thời
+        if (isViewMode) return;
+
         if (galleryPreviews[index] && galleryPreviews[index].startsWith('blob:')) {
             URL.revokeObjectURL(galleryPreviews[index]);
         }
 
-        // Cập nhật state
         setProduct(prev => ({
             ...prev,
             galleryImages: prev.galleryImages.filter((_, i) => i !== index)
         }));
 
-        // Xóa preview tương ứng
         setGalleryPreviews(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Chuyển đổi dữ liệu trước khi gửi
         const productData = {
             ...product,
             originalPrice: parseFloat(product.originalPrice) || 0,
             discountedPrice: parseFloat(product.discountedPrice) || null,
             categoryId: product.categoryId ? parseInt(product.categoryId) : null,
-            // Lấy tên category từ dropdown
             categoryName: categories.find(c => c.id === product.categoryId)?.name || ''
         };
 
-        console.log('Product Data:', productData);
+        setIsLoading(true);
+        setErrorMessage('');
+        setSuccessMessage('');
 
         try {
-            const response = await productManagerApi.addProduct(productData);
-            console.log('Dữ liệu sau khi thêm mới trả về:', response.data);
+            let response;
+            if (isEditMode) {
+                response = await productManagerApi.updateProduct(id, productData);
+            }
+            console.log('API Response:', response);
 
-            // Kiểm tra response và hiển thị thông báo
             if (response.message === "success" || response.success) {
-                alert("Thêm sản phẩm thành công");
-                resetForm();
+                const message = isEditMode ? 'Cập nhật sản phẩm thành công!' : null;
+                setSuccessMessage(message);
             }
             if(!response.success) {
                 let message = response.message;
@@ -234,63 +278,41 @@ const AddNewProduct = () => {
                 }else{
                     message = "Có lỗi khi cập nhật sản phẩm ! (Lỗi bất định)";
                 }
-                alert(message);
+                setErrorMessage(message);
             }
         } catch (error) {
 
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    // hàm reset form
-    const resetForm = () => {
-        // Reset product state
-        setProduct({
-            name: '',
-            description: '',
-            originalPrice: '',
-            discountedPrice: '',
-            thumbnail: '',
-            galleryImages: [],
-            featured: false,
-            active: true,
-            categoryId: '',
-            categoryName: ''
-        });
-
-        // Revoke và reset thumbnail preview
-        if (thumbnailPreview && thumbnailPreview.startsWith('blob:')) {
-            URL.revokeObjectURL(thumbnailPreview);
-        }
-        setThumbnailPreview('');
-
-        // Revoke và reset gallery previews
-        galleryPreviews.forEach(preview => {
-            if (preview.startsWith('blob:')) {
-                URL.revokeObjectURL(preview);
-            }
-        });
-        setGalleryPreviews([]);
-
-        // Reset upload errors
-        setUploadErrors({ thumbnail: '', gallery: '' });
-
-        // Reset upload states
-        setIsUploadingThumbnail(false);
-        setIsUploadingGallery(false);
-
-        // Reset input files
-        if (thumbnailInputRef.current) {
-            thumbnailInputRef.current.value = '';
-        }
-        if (galleryInputRef.current) {
-            galleryInputRef.current.value = '';
-        }
-    };
+    if (isLoading && (isEditMode || isViewMode)) {
+        return (
+            <Container className="py-4 text-center">
+                <Alert variant="info">Đang tải dữ liệu sản phẩm...</Alert>
+            </Container>
+        );
+    }
 
     return (
         <Container className="py-4">
-            {/* Header với tiêu đề chính */}
+            {/* Header */}
             <AdminHeader></AdminHeader>
+
+            {/* Messages */}
+            {errorMessage && (
+                <Alert variant="danger" className="mb-3" onClose={() => setErrorMessage('')} dismissible>
+                    {errorMessage}
+                </Alert>
+            )}
+
+            {successMessage && (
+                <Alert variant="success" className="mb-3" onClose={() => setSuccessMessage('')} dismissible>
+                    {successMessage}
+                </Alert>
+            )}
+
             <Card>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
@@ -304,6 +326,7 @@ const AddNewProduct = () => {
                                 onChange={handleChange}
                                 placeholder="Nhập tên sản phẩm"
                                 required
+                                readOnly={isViewMode}
                             />
                         </Form.Group>
 
@@ -317,6 +340,7 @@ const AddNewProduct = () => {
                                 onChange={handleChange}
                                 placeholder="Nhập mô tả"
                                 required
+                                readOnly={isViewMode}
                             />
                         </Form.Group>
 
@@ -333,6 +357,7 @@ const AddNewProduct = () => {
                                         onChange={handleChange}
                                         placeholder="Nhập giá gốc"
                                         required
+                                        readOnly={isViewMode}
                                     />
                                 </Form.Group>
                             </Col>
@@ -346,6 +371,7 @@ const AddNewProduct = () => {
                                         value={product.discountedPrice}
                                         onChange={handleChange}
                                         placeholder="Nhập giá giảm"
+                                        readOnly={isViewMode}
                                     />
                                 </Form.Group>
                             </Col>
@@ -361,7 +387,7 @@ const AddNewProduct = () => {
                                         value={product.categoryId}
                                         onChange={handleChange}
                                         required
-                                        disabled={loadingCategories}
+                                        disabled={loadingCategories || isViewMode}
                                     >
                                         <option value="">Chọn một danh mục</option>
                                         {categories.map((category) => (
@@ -370,22 +396,14 @@ const AddNewProduct = () => {
                                             </option>
                                         ))}
                                     </Form.Select>
-                                    {product.categoryId && (
-                                        <Form.Control
-                                            type="hidden"
-                                            name="categoryName"
-                                            value={categories.find(c => c.id === product.categoryId)?.name || ''}
-                                        />
-                                    )}
                                 </Form.Group>
                             </Col>
                         </Row>
 
-                        {/* Images */}
+                        {/* Thumbnail Image */}
                         <Form.Group className="mb-3">
                             <Form.Label><strong>Ảnh chính</strong></Form.Label>
 
-                            {/* Hiển thị lỗi upload thumbnail nếu có */}
                             {uploadErrors.thumbnail && (
                                 <Alert variant="danger" className="py-1 mb-2">
                                     {uploadErrors.thumbnail}
@@ -393,25 +411,30 @@ const AddNewProduct = () => {
                             )}
 
                             <div className="thumbnail-upload-container mb-2">
-                                <Form.Control
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleThumbnailUpload}
-                                    ref={thumbnailInputRef}
-                                    disabled={isUploadingThumbnail}
-                                    className="d-none"
-                                    id="thumbnail-upload"
-                                />
+                                {!isViewMode && (
+                                    <Form.Control
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleThumbnailUpload}
+                                        ref={thumbnailInputRef}
+                                        disabled={isUploadingThumbnail || isViewMode}
+                                        className="d-none"
+                                        id="thumbnail-upload"
+                                    />
+                                )}
 
-                                {/* Nút upload thay thế */}
                                 {!product.thumbnail ? (
-                                    <Form.Label
-                                        htmlFor="thumbnail-upload"
-                                        className={`btn ${isUploadingThumbnail ? 'btn-secondary' : 'btn-outline-primary'} w-100`}
-                                        style={{ cursor: isUploadingThumbnail ? 'not-allowed' : 'pointer' }}
-                                    >
-                                        {isUploadingThumbnail ? 'Đang tải lên...' : '📷 Chọn ảnh chính'}
-                                    </Form.Label>
+                                    !isViewMode ? (
+                                        <Form.Label
+                                            htmlFor="thumbnail-upload"
+                                            className={`btn ${isUploadingThumbnail ? 'btn-secondary' : 'btn-outline-primary'} w-100`}
+                                            style={{ cursor: isUploadingThumbnail ? 'not-allowed' : 'pointer' }}
+                                        >
+                                            {isUploadingThumbnail ? 'Đang tải lên...' : '📷 Chọn ảnh chính'}
+                                        </Form.Label>
+                                    ) : (
+                                        <div className="text-muted">Không có ảnh chính</div>
+                                    )
                                 ) : (
                                     <div className="thumbnail-preview-wrapper" style={{ position: 'relative', display: 'inline-block' }}>
                                         <img
@@ -424,59 +447,61 @@ const AddNewProduct = () => {
                                                 borderRadius: '8px'
                                             }}
                                         />
-                                        <Button
-                                            variant="danger"
-                                            size="sm"
-                                            className="position-absolute top-0 end-0"
-                                            style={{ transform: 'translate(30%, -30%)' }}
-                                            onClick={handleRemoveThumbnail}
-                                            disabled={isUploadingThumbnail}
-                                        >
-                                            ×
-                                        </Button>
+                                        {!isViewMode && (
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                className="position-absolute top-0 end-0"
+                                                style={{ transform: 'translate(30%, -30%)' }}
+                                                onClick={handleRemoveThumbnail}
+                                                disabled={isUploadingThumbnail}
+                                            >
+                                                ×
+                                            </Button>
+                                        )}
                                     </div>
                                 )}
                             </div>
 
-                            {/* Hiển thị URL của thumbnail đã upload */}
-                            {product.thumbnail && (
+                            {product.thumbnail && !isViewMode && (
                                 <Form.Text className="text-muted d-block mt-1">
                                     URL: <small>{product.thumbnail.substring(0, 50)}...</small>
                                 </Form.Text>
                             )}
                         </Form.Group>
 
+                        {/* Gallery Images */}
                         <Form.Group className="mb-3">
                             <Form.Label><strong>Bộ ảnh</strong></Form.Label>
 
-                            {/* Hiển thị lỗi upload gallery nếu có */}
                             {uploadErrors.gallery && (
                                 <Alert variant="warning" className="py-1 mb-2">
                                     {uploadErrors.gallery}
                                 </Alert>
                             )}
 
-                            <div className="gallery-upload-container mb-2">
-                                <Form.Control
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    onChange={handleGalleryImagesUpload}
-                                    ref={galleryInputRef}
-                                    disabled={isUploadingGallery}
-                                    className="d-none"
-                                    id="gallery-upload"
-                                />
+                            {!isViewMode && (
+                                <div className="gallery-upload-container mb-2">
+                                    <Form.Control
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleGalleryImagesUpload}
+                                        ref={galleryInputRef}
+                                        disabled={isUploadingGallery || isViewMode}
+                                        className="d-none"
+                                        id="gallery-upload"
+                                    />
 
-                                {/* Nút upload thay thế */}
-                                <Form.Label
-                                    htmlFor="gallery-upload"
-                                    className={`btn ${isUploadingGallery ? 'btn-secondary' : 'btn-outline-success'} w-100`}
-                                    style={{ cursor: isUploadingGallery ? 'not-allowed' : 'pointer' }}
-                                >
-                                    {isUploadingGallery ? 'Đang tải lên...' : '📸 Chọn nhiều ảnh'}
-                                </Form.Label>
-                            </div>
+                                    <Form.Label
+                                        htmlFor="gallery-upload"
+                                        className={`btn ${isUploadingGallery ? 'btn-secondary' : 'btn-outline-success'} w-100`}
+                                        style={{ cursor: isUploadingGallery ? 'not-allowed' : 'pointer' }}
+                                    >
+                                        {isUploadingGallery ? 'Đang tải lên...' : '📸 Chọn nhiều ảnh'}
+                                    </Form.Label>
+                                </div>
+                            )}
 
                             {/* Hiển thị gallery previews */}
                             {galleryPreviews.length > 0 && (
@@ -497,16 +522,18 @@ const AddNewProduct = () => {
                                                             border: '1px solid #dee2e6'
                                                         }}
                                                     />
-                                                    <Button
-                                                        variant="danger"
-                                                        size="sm"
-                                                        className="position-absolute top-0 end-0"
-                                                        style={{ transform: 'translate(30%, -30%)' }}
-                                                        onClick={() => handleRemoveGalleryImage(index)}
-                                                        disabled={isUploadingGallery}
-                                                    >
-                                                        ×
-                                                    </Button>
+                                                    {!isViewMode && (
+                                                        <Button
+                                                            variant="danger"
+                                                            size="sm"
+                                                            className="position-absolute top-0 end-0"
+                                                            style={{ transform: 'translate(30%, -30%)' }}
+                                                            onClick={() => handleRemoveGalleryImage(index)}
+                                                            disabled={isUploadingGallery}
+                                                        >
+                                                            ×
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             </Col>
                                         ))}
@@ -516,46 +543,64 @@ const AddNewProduct = () => {
                         </Form.Group>
 
                         {/* Checkboxes */}
-                        <Row className="mb-4">
-                            <Col md={6}>
-                                <Form.Check
-                                    type="checkbox"
-                                    label="Sản phẩm nổi bật"
-                                    name="featured"
-                                    checked={product.featured}
-                                    onChange={handleChange}
-                                    className="mb-2"
-                                />
-                                <Form.Check
-                                    type="checkbox"
-                                    label="Sản phẩm được hiển thị"
-                                    name="active"
-                                    checked={product.active}
-                                    onChange={handleChange}
-                                />
-                            </Col>
-                        </Row>
+                        {!isViewMode && (
+                            <Row className="mb-4">
+                                <Col md={6}>
+                                    <Form.Check
+                                        type="checkbox"
+                                        label="Sản phẩm nổi bật"
+                                        name="featured"
+                                        checked={product.featured}
+                                        onChange={handleChange}
+                                        className="mb-2"
+                                        disabled={isViewMode}
+                                    />
+                                    <Form.Check
+                                        type="checkbox"
+                                        label="Sản phẩm được hiển thị"
+                                        name="active"
+                                        checked={product.active}
+                                        onChange={handleChange}
+                                        disabled={isViewMode}
+                                    />
+                                </Col>
+                            </Row>
+                        )}
 
-                        {/* Submit Button */}
-                        <div className="d-flex justify-content-end gap-2">
-                            <Button
-                                variant="secondary"
-                                size="lg"
-                                style={{ minWidth: '150px' }}
-                                onClick={resetForm}
-                                type="button"
-                            >
-                                Hoàn tác
-                            </Button>
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                size="lg"
-                                style={{ minWidth: '150px' }}
-                            >
-                                Thêm sản phẩm
-                            </Button>
-                        </div>
+                        {/* Action Buttons */}
+                        {isEditMode && (
+                            <div className="d-flex justify-content-end gap-2">
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    size="lg"
+                                    style={{ minWidth: '150px' }}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Đang xử lý...' : (
+                                        <>
+                                            <Save className="me-1" />
+                                            Cập nhật
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        )}
+
+                        {isViewMode && (
+                            <div className="d-flex justify-content-end gap-2">
+                                <Link to={`/admin/products/edit/${id}`}>
+                                    <Button
+                                        variant="primary"
+                                        size="lg"
+                                        style={{ minWidth: '150px' }}
+                                    >
+                                        <Pencil className="me-1" />
+                                        Chỉnh sửa
+                                    </Button>
+                                </Link>
+                            </div>
+                        )}
                     </Form>
                 </Card.Body>
             </Card>
@@ -563,4 +608,4 @@ const AddNewProduct = () => {
     );
 };
 
-export default AddNewProduct;
+export default ProductForm;

@@ -93,7 +93,6 @@ const productManagerApi = {
             },
             body: JSON.stringify(productRequest)
         });
-        if (!res.ok) return null;
         const json = await res.json();
         return json;
     },
@@ -107,6 +106,32 @@ const productManagerApi = {
             }
         });
         if (!res.ok) return null;
+        const json = await res.json();
+        return json;
+    },
+
+    getProductById: async (id) => {
+        const res = await fetch(`http://localhost:8080/api/admin/product-management/products/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+        if (!res.ok) return null;
+        const json = await res.json();
+        return json;
+    },
+
+    updateProduct: async (id, productRequest) => {
+        const res =  await fetch(`http://localhost:8080/api/admin/product-management/products/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(productRequest)
+        });
         const json = await res.json();
         return json;
     }

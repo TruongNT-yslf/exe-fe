@@ -7,46 +7,13 @@ import {
     Button,
 } from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {BoxArrowRight, House, Pencil, Speedometer2} from "react-bootstrap-icons";
+import AdminHeader from "../../components/admin/AdminHeader";
 
 const AdminDashboard = () => {
     return (
         <Container className="py-5">
             {/* Header với tiêu đề chính */}
-            <Row className="mb-4 align-items-center">
-                <Col>
-                    <h2 className="fw-bold">Chế độ Admin</h2>
-                    <p className="text-muted">Quản lý hệ thống</p>
-                </Col>
-                <Col className="text-end">
-                    <div className="d-flex justify-content-end gap-2">
-                        {/* Nút trở về bảng điều khiển */}
-                        <Link to="/admin/dashboard">
-                            <Button variant="outline-secondary" size="sm">
-                                <Speedometer2 className="me-1" size={14} />
-                                Bảng điều khiển
-                            </Button>
-                        </Link>
-
-                        {/* Nút trở về trang chủ */}
-                        <Link to="/">
-                            <Button variant="outline-secondary" size="sm">
-                                <House className="me-1" size={14} />
-                                Trang chủ
-                            </Button>
-                        </Link>
-
-                        {/* Nút đăng xuất */}
-                        <Button
-                            variant="outline-danger"
-                            size="sm"
-                        >
-                            <BoxArrowRight className="me-1" size={14} />
-                            Đăng xuất
-                        </Button>
-                    </div>
-                </Col>
-            </Row>
+            <AdminHeader></AdminHeader>
             <Row>
                 <Col md={12}>
                     <Card className="shadow-sm">

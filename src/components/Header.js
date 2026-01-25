@@ -201,6 +201,12 @@ export default function Header() {
                                         onMouseLeave={() => setShowUser(false)}
                                     >
                                         <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
+                                        {user.username === "admin" && (
+                                            <>
+                                                <NavDropdown.Divider />
+                                                <NavDropdown.Item onClick={() =>navigate("/admin/dashboard")} className="text-info">Admin Mode</NavDropdown.Item>
+                                            </>
+                                        )}
                                         <NavDropdown.Divider />
                                         <NavDropdown.Item onClick={handleLogout} className="text-danger">Logout</NavDropdown.Item>
                                     </NavDropdown>

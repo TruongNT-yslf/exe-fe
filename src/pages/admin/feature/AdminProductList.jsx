@@ -1,5 +1,5 @@
 "use client"
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect} from 'react';
 import {
     Container,
     Row,
@@ -11,18 +11,13 @@ import {
     Badge,
     Modal,
     InputGroup,
-    Dropdown,
-    DropdownButton,
     Pagination,
     OverlayTrigger,
-    Tooltip,
-    FormCheck
+    Tooltip
 } from 'react-bootstrap';
 import {
     Search,
     Filter,
-    SortDown,
-    SortUp,
     Pencil,
     Trash,
     Eye,
@@ -31,16 +26,12 @@ import {
     XCircle,
     Star,
     StarFill,
-    // ArrowUpDown,
-    Tag, ArrowRepeat,
-    FileText,
-    Speedometer2,
-    House,
-    BoxArrowRight
+    Tag,
+    FileText
 } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
 import productManagerApi from "../../../api/ProductManagerApi";
-import {ArrowUpDown} from "lucide-react";
+import AdminHeader from "../../../components/admin/AdminHeader";
 
 const AdminProductList = () => {
     // States
@@ -328,40 +319,7 @@ const AdminProductList = () => {
     return (
         <Container fluid className="py-4">
             {/* Header với tiêu đề chính */}
-            <Row className="mb-4 align-items-center">
-                <Col>
-                    <h2 className="fw-bold">Quản lý Sản phẩm</h2>
-                    <p className="text-muted">Quản lý danh sách sản phẩm trong hệ thống</p>
-                </Col>
-                <Col className="text-end">
-                    <div className="d-flex justify-content-end gap-2">
-                        {/* Nút trở về bảng điều khiển */}
-                        <Link to="/admin/dashboard">
-                            <Button variant="outline-secondary" size="sm">
-                                <Speedometer2 className="me-1" size={14} />
-                                Bảng điều khiển
-                            </Button>
-                        </Link>
-
-                        {/* Nút trở về trang chủ */}
-                        <Link to="/">
-                            <Button variant="outline-secondary" size="sm">
-                                <House className="me-1" size={14} />
-                                Trang chủ
-                            </Button>
-                        </Link>
-
-                        {/* Nút đăng xuất */}
-                        <Button
-                            variant="outline-danger"
-                            size="sm"
-                        >
-                            <BoxArrowRight className="me-1" size={14} />
-                            Đăng xuất
-                        </Button>
-                    </div>
-                </Col>
-            </Row>
+            <AdminHeader></AdminHeader>
 
             {/* Filter Card */}
             <Card className="mb-4 shadow-sm border-0">
@@ -697,8 +655,8 @@ const AdminProductList = () => {
                                         {/* Actions */}
                                         <td className="align-middle text-center">
                                             <div className="btn-group" role="group">
-                                                <Link to={`/admin/products/${product.id}/edit`}>
-                                                    <Button variant="outline-primary" size="sm" className="me-2">
+                                                <Link to={`/admin/products/edit/${product.id}`}>
+                                                    <Button variant="outline-primary" size="sm" className="me-2" title={"Chỉnh sửa sản phẩm"}>
                                                         <Pencil size={14}/>
                                                     </Button>
                                                 </Link>
@@ -706,9 +664,11 @@ const AdminProductList = () => {
                                                     placement="top"
                                                     overlay={<Tooltip>Xem chi tiết</Tooltip>}
                                                 >
-                                                    <Button variant="outline-info" size="sm" className="me-2">
-                                                        <Eye size={14}/>
-                                                    </Button>
+                                                    <Link to={`/admin/products/view/${product.id}`}>
+                                                        <Button variant="outline-info" size="sm" className="me-2">
+                                                            <Eye size={14}/>
+                                                        </Button>
+                                                    </Link>
                                                 </OverlayTrigger>
                                                 <OverlayTrigger
                                                     placement="top"
