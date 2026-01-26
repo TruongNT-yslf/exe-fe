@@ -1,4 +1,4 @@
-.blog-admin-container {
+.blog-admin-container- {
     min-height: 100vh;
     background: linear-gradient(135deg, #fef9f0 0%, #fdf7ec 100%);
     padding: 40px 20px;
@@ -45,20 +45,20 @@
     }
 }
 
-.alert-error {
+.alert-error- {
     background: #fee;
     color: #c33;
     border-color: #c33;
 }
 
-.alert-success {
+.alert-success- {
     background: #efe;
     color: #3c3;
     border-color: #3c3;
 }
 
 /* Form Section */
-.blog-form {
+.blog-form- {
     max-width: 1000px;
     margin: 0 auto 50px;
     background: white;
@@ -67,7 +67,7 @@
     box-shadow: 0 4px 12px rgba(139, 111, 71, 0.1);
 }
 
-.form-section h2 {
+.form-section- h2 {
     font-size: 28px;
     font-weight: 600;
     color: #2d2d2d;
@@ -88,7 +88,7 @@
     margin-bottom: 8px;
 }
 
-.form-input,
+.form-input-,
 .form-textarea {
     width: 100%;
     padding: 12px 14px;
@@ -100,7 +100,7 @@
     background: #fafaf9;
 }
 
-.form-input:focus,
+.form-input-:focus,
 .form-textarea:focus {
     outline: none;
     border-color: #8b6f47;
@@ -203,7 +203,7 @@
 }
 
 /* Form Actions */
-.form-actions {
+.form-actions- {
     display: flex;
     gap: 12px;
     margin-top: 32px;
@@ -211,7 +211,7 @@
     border-top: 1px solid #e8dcc8;
 }
 
-.btn {
+.btn- {
     padding: 12px 28px;
     border: none;
     border-radius: 6px;
@@ -247,7 +247,7 @@
 }
 
 /* Posts Section */
-.posts-section {
+.posts-section- {
     max-width: 1000px;
     margin: 0 auto;
     background: white;
@@ -256,7 +256,7 @@
     box-shadow: 0 4px 12px rgba(139, 111, 71, 0.1);
 }
 
-.posts-section h2 {
+.posts-section- h2 {
     font-size: 28px;
     font-weight: 600;
     color: #2d2d2d;
@@ -387,12 +387,12 @@
     }
 
     .blog-form,
-    .posts-section {
+    .posts-section- {
         padding: 24px 20px;
     }
 
     .form-section h2,
-    .posts-section h2 {
+    .posts-section- h2 {
         font-size: 22px;
     }
 

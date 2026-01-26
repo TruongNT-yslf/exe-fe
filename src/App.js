@@ -20,6 +20,7 @@ import Cart from "./pages/cart/Cart";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProductList from "./pages/admin/feature/AdminProductList";
 import AddNewProduct from "./pages/admin/feature/AddNewProduct";
+import ChangePassword from "./pages/auth/ChangePassword";
 function App() {
     const token = getToken();
     return (
@@ -48,6 +49,7 @@ function App() {
                     {/* USER routes */}
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path="/change-password" element={<ChangePassword />} />
                     {/* STAFF routes */}
 
                     {/* ADMIN routes */}

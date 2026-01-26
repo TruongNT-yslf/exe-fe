@@ -143,6 +143,9 @@ export default function ProfilePage() {
                         <button className="btn btn-light w-100 text-start fw-bold text-success mb-1" onClick={() => navigate("/home")}>
                             Quay về trang chủ
                         </button>
+                        <button className="btn btn-light w-100 text-start fw-bold text-warning mb-1" onClick={() => navigate("/change-password")}>
+                            Thay đổi mật khẩu
+                        </button>
                         <button className="btn btn-light w-100 text-start text-danger" onClick={() => navigate("/logout")}>
                             Đăng xuất
                         </button>

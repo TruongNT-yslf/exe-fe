@@ -202,13 +202,13 @@ export default function BlogAdmin() {
     };
 
     return (
-        <div className="blog-admin-container">
+        <div className="blog-admin-container-">
             {/* ... Header, Alert ... */}
-            {error && <div className="alert alert-error">{error}</div>}
-            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            {error && <div className="alert alert-error-">{error}</div>}
+            {successMessage && <div className="alert alert-success-">{successMessage}</div>}
 
-            <form onSubmit={handleSubmit} className="blog-form">
-                <div className="form-section">
+            <form onSubmit={handleSubmit} className="blog-form-">
+                <div className="form-section-">
                     <h2>{editingId ? 'Chỉnh Sửa' : 'Tạo Bài Viết'}</h2>
 
                     <div className="form-group">
@@ -218,7 +218,7 @@ export default function BlogAdmin() {
                             name="title"
                             value={formData.title}
                             onChange={handleInputChange}
-                            className="form-input"
+                            className="form-input-"
                             required
                         />
                     </div>
@@ -240,7 +240,7 @@ export default function BlogAdmin() {
                                 <button
                                     type="button"
                                     onClick={() => thumbnailInputRef.current?.click()}
-                                    className="btn btn-secondary"
+                                    className="btn- btn-secondary"
                                     disabled={isUploadingThumbnail}
                                 >
                                     {isUploadingThumbnail ? 'Đang tải lên...' : '📷 Chọn Ảnh Bìa'}
@@ -283,18 +283,18 @@ export default function BlogAdmin() {
                         />
                     </div>
 
-                    <div className="form-actions">
-                        <button type="submit" disabled={loading || isUploadingThumbnail} className="btn btn-primary">
+                    <div className="form-actions-">
+                        <button type="submit" disabled={loading || isUploadingThumbnail} className="btn- btn-primary">
                             {loading ? 'Đang lưu...' : editingId ? 'Cập Nhật' : 'Tạo Bài Viết'}
                         </button>
                         {editingId && (
-                            <button type="button" onClick={handleCancel} className="btn btn-secondary">Hủy</button>
+                            <button type="button" onClick={handleCancel} className="btn- btn-secondary">Hủy</button>
                         )}
                     </div>
                 </div>
             </form>
 
-            <div className="posts-section">
+            <div className="posts-section-">
                 <h2>Danh Sách Bài Viết ({posts.length})</h2>
 
                 {loading ? (

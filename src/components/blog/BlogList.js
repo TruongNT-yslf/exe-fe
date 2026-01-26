@@ -18,7 +18,7 @@ export default function BlogList() {
                 const response = await getBlogs();
                 setBlogs(response.data.data || []);
             } catch (err) {
-                console.error('[v0] Error fetching blogs:', err);
+                console.error('Error fetching blogs:', err);
                 setError('Không thể tải danh sách bài viết');
             } finally {
                 setLoading(false);

@@ -1,4 +1,5 @@
 import {getToken} from "../utils/auth";
+import api from "./api";
 
 export async function login(username, password) {
     const response = await fetch("http://localhost:8080/api/auth/login", {
@@ -52,3 +53,13 @@ export const getUser = async () => {
         return null;
     }
 }
+
+export const changePassword = (oldPassword, newPassword) => {
+    return api.post("/users/change-password", { oldPassword, newPassword });
+};
+
+export const forgotPassword = (key) => {
+    return api.post("/auth/forgot-password", key, {
+        headers: { "Content-Type": "text/plain" }
+    });
+};
