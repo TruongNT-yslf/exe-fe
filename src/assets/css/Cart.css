@@ -122,3 +122,21 @@
         height: 60px;
     }
 }
+
+
+.form-check-input:checked {
+    background-color: #2e7d32 !important;
+    border-color: #2e7d32 !important;
+    box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25) !important; /* Hiệu ứng tỏa sáng nhẹ */
+}
+
+.form-check-input:hover {
+    border-color: #2e7d32;
+    cursor: pointer;
+}
+
+
+.form-check-input:focus {
+    border-color: #2e7d32;
+    box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
+}

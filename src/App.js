@@ -23,6 +23,7 @@ import AddNewProduct from "./pages/admin/feature/AddNewProduct";
 import ChangePassword from "./pages/auth/ChangePassword";
 import EditProduct from "./components/admin/navigate-view-or-edit/EditProduct";
 import AdminViewProduct from "./components/admin/navigate-view-or-edit/ViewProduct";
+import Checkout from "./pages/checkout/CheckoutPage";
 function App() {
     const token = getToken();
     return (
@@ -51,6 +52,7 @@ function App() {
                     {/* USER routes */}
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path="/checkout" element={<Checkout />} />
                     <Route path="/change-password" element={<ChangePassword />} />
                     {/* STAFF routes */}
 
