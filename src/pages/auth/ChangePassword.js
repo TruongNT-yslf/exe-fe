@@ -3,7 +3,8 @@ import { Form, Button, Alert, Container, Card, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../api/auth";
 import BackgroundImage from "../../assets/images/bg4.jpg";
-
+import {Helmet} from "react-helmet-async";
+import Logo from "../../assets/images/LOGO-EXE.png";
 function ChangePasswordPage() {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -52,6 +53,10 @@ function ChangePasswordPage() {
             padding: '20px'
         }}>
             <Container style={{ maxWidth: "500px" }}>
+                <Helmet>
+                    <title>Thay đổi mật khẩu</title>
+                    <link rel="icon" href={Logo} />
+                </Helmet>
                 <Stack direction="horizontal" gap={2} className="mb-3">
                     <Button variant="light" onClick={() => navigate("/profile")} className="shadow-sm">
                         ← Quay lại

@@ -1,5 +1,5 @@
 import "../assets/css/Footer.css";
-import Logo from "../assets/images/LOGO EXE.png";
+import Logo from "../assets/images/LOGO-EXE.png";
 export default function Footer() {
     return (
         <footer className="site-footer">

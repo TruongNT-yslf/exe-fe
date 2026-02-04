@@ -2,7 +2,7 @@
 // import React, {useContext} from "react";
 // import {Link, useNavigate} from "react-router-dom";
 // import {AuthContext} from "../context/AuthContext";
-// import Logo from "../assets/images/LOGO EXE.png";
+// import Logo from "../assets/images/LOGO-EXE.png";
 // export default function Header() {
 //     const navigate = useNavigate();
 //     const {user, logout} = useContext(AuthContext);
@@ -123,9 +123,25 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
-import Logo from "../assets/images/LOGO EXE.png";
+import Logo from "../assets/images/LOGO-EXE.png";
 import "../assets/css/Header.css";
 import { FaShoppingCart } from 'react-icons/fa';
+const BACKEND_URL = process.env.REACT_APP_API_URL
+export async function login(username, password) {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || "Login failed";
+        throw new Error(errorMessage);
+    }
+
+    return response.json(); // { token, expiration }
+}
 export default function Header() {
     const navigate = useNavigate();
     const { user, logout } = useContext(AuthContext);
@@ -134,7 +150,7 @@ export default function Header() {
     const [showUser, setShowUser] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/categories")
+        axios.get(`${BACKEND_URL}/categories`)
             .then(res => setCategories(res.data.data))
             .catch(err => console.error(err));
     }, []);

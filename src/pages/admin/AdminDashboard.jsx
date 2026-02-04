@@ -8,12 +8,17 @@ import {
 } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import AdminHeader from "../../components/admin/AdminHeader";
-
+import Logo from "../../assets/images/LOGO-EXE.png";
+import {Helmet} from "react-helmet-async";
 const AdminDashboard = () => {
     return (
         <Container className="py-5">
             {/* Header với tiêu đề chính */}
             <AdminHeader></AdminHeader>
+            <Helmet>
+                <title>Bảng điều khiển admin</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <Row>
                 <Col md={12}>
                     <Card className="shadow-sm">

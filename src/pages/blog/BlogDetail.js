@@ -5,7 +5,8 @@ import { useParams, Link } from 'react-router-dom';
 import { getBlogById, getBlogs } from '../../api/Blog';
 import { formatDate } from '../../utils/dateFormat';
 import './BlogDetail.css';
-
+import {Helmet} from "react-helmet-async";
+import Logo from "../../assets/images/LOGO-EXE.png";
 export default function BlogDetail() {
     const { id } = useParams();
     const [blog, setBlog] = useState(null);
@@ -76,6 +77,10 @@ export default function BlogDetail() {
 
     return (
         <div className="blog-detail-container">
+            <Helmet>
+                <title>Blog | Nhà mây tre</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <div className="blog-detail-nav">
                 <div className="blog-detail-nav-wrapper">
                     <Link to="/blogs" className="blog-detail-nav-link">

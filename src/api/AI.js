@@ -1,5 +1,5 @@
 // Configuration for backend API
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080/api"
+const BACKEND_URL = process.env.REACT_APP_API_URL
 
 /**
  * Send question to AI backend and get response

@@ -35,7 +35,8 @@ import {
 } from 'react-bootstrap-icons';
 import adminOrderApi from "../../../api/AdminOrderApi";
 import AdminHeader from "../../../components/admin/AdminHeader";
-
+import Logo from "../../../assets/images/LOGO-EXE.png";
+import {Helmet} from "react-helmet-async";
 const AdminOrderList = () => {
     // States
     const [orders, setOrders] = useState([]);
@@ -321,6 +322,10 @@ const AdminOrderList = () => {
         <Container fluid className="py-4">
             {/* Header */}
             <AdminHeader/>
+            <Helmet>
+                <title>Danh sách đơn hàng</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             {/* Statistics Cards */}
             <Row className="mb-4">
                 <Col md={2}>

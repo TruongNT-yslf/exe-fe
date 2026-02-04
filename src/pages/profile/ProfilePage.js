@@ -6,7 +6,8 @@ import {useState, useEffect, useMemo} from "react";
 import {getProvinces, getWardsByProvince} from "../../api/LocalLocation";
 import {fetchUserProfile, updateUserProfile} from "../../api/Profile";
 import "./profile.css";
-
+import {Helmet} from "react-helmet-async";
+import Logo from "../../assets/images/LOGO-EXE.png";
 export default function ProfilePage() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -124,6 +125,10 @@ export default function ProfilePage() {
     return (
         <div className="profile-container container py-4">
             {/* Header Profile */}
+            <Helmet>
+                <title>Thông tin cá nhân || Nhà Mây Tre</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <div className="card-bamboo p-4 mb-4 d-flex align-items-center gap-3 shadow-sm bg-white rounded">
                 <div
                     className="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"

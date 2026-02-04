@@ -6,7 +6,24 @@ import { FaTrash, FaChevronLeft, FaShoppingBasket, FaTruckMoving } from 'react-i
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../assets/css/Cart.css';
+import Logo from "../../assets/images/LOGO-EXE.png";
+import {Helmet} from "react-helmet-async";
+const BACKEND_URL = process.env.REACT_APP_API_URL
+export async function login(username, password) {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
 
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || "Login failed";
+        throw new Error(errorMessage);
+    }
+
+    return response.json(); // { token, expiration }
+}
 const Cart = () => {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -20,7 +37,7 @@ const Cart = () => {
     const fetchCart = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/api/cart', axiosConfig);
+            const response = await axios.get(`${BACKEND_URL}/cart`, axiosConfig);
             if (response.data.success) {
                 setCart(response.data.data);
                 // Mặc định chọn tất cả khi mới load hoặc có thể để mảng rỗng []
@@ -73,7 +90,7 @@ const Cart = () => {
         setUpdatingId(productId);
         try {
             const response = await axios.put(
-                `http://localhost:8080/api/cart/item/${productId}`,
+                `${BACKEND_URL}/cart/item/${productId}`,
                 null,
                 { ...axiosConfig, params: { quantity: newQuantity } }
             );
@@ -88,7 +105,7 @@ const Cart = () => {
     const handleDeleteItem = async (productId) => {
         if (!window.confirm("Xóa sản phẩm này?")) return;
         try {
-            const response = await axios.delete(`http://localhost:8080/api/cart/item/${productId}`, axiosConfig);
+            const response = await axios.delete(`${BACKEND_URL}/cart/item/${productId}`, axiosConfig);
             if (response.data.success) {
                 setCart(response.data.data);
                 setSelectedIds(prev => prev.filter(id => id !== productId));
@@ -115,6 +132,10 @@ const Cart = () => {
     return (
         <div className="cart-page-wrapper">
             <Header />
+            <Helmet>
+                <title>Giỏ hàng | Nhà Mây Tre</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <div className="header-spacer"></div>
 
             <Container className="py-5">

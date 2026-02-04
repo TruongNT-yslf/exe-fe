@@ -3,7 +3,8 @@ import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap'
 import productManagerApi from "../../../api/ProductManagerApi";
 import api from "../../../api/api";
 import AdminHeader from "../../../components/admin/AdminHeader";
-
+import {Helmet} from "react-helmet-async";
+import Logo from "../../../assets/images/LOGO-EXE.png";
 const AddNewProduct = () => {
     const [product, setProduct] = useState({
         name: '',
@@ -291,6 +292,10 @@ const AddNewProduct = () => {
         <Container className="py-4">
             {/* Header với tiêu đề chính */}
             <AdminHeader></AdminHeader>
+            <Helmet>
+                <title>Thêm sản phẩm mới</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <Card>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>

@@ -9,7 +9,24 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartShopping} from "@fortawesome/free-solid-svg-icons";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import Logo from "../../assets/images/LOGO-EXE.png";
+import {Helmet} from "react-helmet-async";
+const BACKEND_URL = process.env.REACT_APP_API_URL
+export async function login(username, password) {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
 
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || "Login failed";
+        throw new Error(errorMessage);
+    }
+
+    return response.json(); // { token, expiration }
+}
 function ViewProduct() {
     const token = getToken();
     const navigate = useNavigate();
@@ -31,7 +48,7 @@ function ViewProduct() {
 
 
     useEffect(() => {
-        api.get("http://localhost:8080/api/categories")
+        api.get(`${BACKEND_URL}/categories`)
             .then(res => setCategories(res.data.data || []))
             .catch(err => console.error(err));
     }, []);
@@ -49,7 +66,7 @@ function ViewProduct() {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const res = await api.get("http://localhost:8080/api/products/view", {
+            const res = await api.get(`${BACKEND_URL}/products/view`, {
                 params: {
                     keyword: searchParams.get("keyword") || "",
                     categoryId: searchParams.get("categoryId") || "",
@@ -95,7 +112,7 @@ function ViewProduct() {
     };
 
     const handleAddToCart = (productId) => {
-        axios.post("http://localhost:8080/api/cart/add", null, {
+        axios.post(`${BACKEND_URL}/cart/add`, null, {
             params: {productId, quantity: 1},
             headers: {Authorization: `Bearer ${token}`}
         })
@@ -106,6 +123,10 @@ function ViewProduct() {
     return (
         <>
             <Header/>
+            <Helmet>
+                <title>Danh mục sản phẩm | Nhà Mây Tre</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <Container style={{maxWidth: 1200, paddingTop: "150px"}}>
                 <Row>
                     <Col md={3}>

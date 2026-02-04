@@ -5,7 +5,24 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import Logo from "../../assets/images/LOGO-EXE.png";
+import {Helmet} from "react-helmet-async";
+const BACKEND_URL = process.env.REACT_APP_API_URL
+export async function login(username, password) {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
 
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || "Login failed";
+        throw new Error(errorMessage);
+    }
+
+    return response.json(); // { token, expiration }
+}
 const CheckoutPage = ({ userProfile }) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -69,7 +86,7 @@ const CheckoutPage = ({ userProfile }) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/api/orders/add', orderRequest, {
+            const response = await axios.post(`${BACKEND_URL}/orders/add`, orderRequest, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -86,6 +103,10 @@ const CheckoutPage = ({ userProfile }) => {
     return (
         <>
         <Header />
+            <Helmet>
+                <title>Check out | Nhà Mây Tre</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <div className="checkout-container">
                 <h2 className="checkout-title">Xác Nhận Đơn Hàng</h2>
 

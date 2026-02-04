@@ -5,8 +5,9 @@ import { saveToken } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import "../../assets/css/Login.css";
 import BackgroundImage from "../../assets/images/bg4.jpg";
-import Logo from "../../assets/images/LOGO EXE.png";
+import Logo from "../../assets/images/LOGO-EXE.png";
 import { AuthContext } from "../../context/AuthContext";
+import {Helmet} from "react-helmet-async";
 
 function LoginPage() {
     // Thay vì isSignIn (boolean), dùng mode (string): 'LOGIN', 'SIGNUP', 'FORGOT'
@@ -86,6 +87,10 @@ function LoginPage() {
 
     return (
         <div className="sign-in__wrapper" style={{ backgroundImage: `url(${BackgroundImage})` }}>
+            <Helmet>
+                <title>Trang đăng nhập</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <div className="sign-in__backdrop"></div>
 
             <Form className="shadow p-4 bg-white rounded" onSubmit={handleSubmit}>

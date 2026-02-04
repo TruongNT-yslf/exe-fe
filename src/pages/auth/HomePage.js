@@ -9,6 +9,25 @@ import BG from "../../assets/images/homebg.jpg";
 import "../../assets/css/Home.css";
 import axios from "axios";
 import ChatBox from "../../components/chatbot/ChatBox";
+import {Helmet} from "react-helmet-async";
+import Logo from "../../assets/images/LOGO-EXE.png";
+const BACKEND_URL = process.env.REACT_APP_API_URL
+
+export async function login(username, password) {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || "Login failed";
+        throw new Error(errorMessage);
+    }
+
+    return response.json(); // { token, expiration }
+}
 function HomePage() {
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
@@ -24,7 +43,7 @@ function HomePage() {
         navigate("/login");
     };
     useEffect(() => {
-        axios.get("http://localhost:8080/api/categories")
+        axios.get(`${BACKEND_URL}/categories`)
             .then(res => setCategories(res.data.data))
             .catch(err => console.error(err));
     }, []);
@@ -34,7 +53,10 @@ function HomePage() {
     return (
         <>
             <Header />
-
+            <Helmet>
+                <title>Trang Chủ | Nhà Mây Tre</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <section
                 className="hero-section text-center"
                 style={{

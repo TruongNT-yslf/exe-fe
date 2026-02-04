@@ -13,7 +13,24 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import '../../assets/css/ProductDetails.css';
+import {Helmet} from "react-helmet-async";
+import Logo from "../../assets/images/LOGO-EXE.png";
+const BACKEND_URL = process.env.REACT_APP_API_URL
+export async function login(username, password) {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
 
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || "Login failed";
+        throw new Error(errorMessage);
+    }
+
+    return response.json(); // { token, expiration }
+}
 const ProductDetail = () => {
     const {id} = useParams();
     const navigate = useNavigate();
@@ -29,7 +46,7 @@ const ProductDetail = () => {
         const fetchProduct = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`http://localhost:8080/api/products/view/${id}`);
+                const response = await axios.get(`${BACKEND_URL}/products/view/${id}`);
                 if (response.data.success) {
                     setProduct(response.data.data);
                 }
@@ -56,7 +73,7 @@ const ProductDetail = () => {
             }
 
             const response = await axios.post(
-                `http://localhost:8080/api/cart/add`,
+                `${BACKEND_URL}/cart/add`,
                 null,
                 {
                     params: {
@@ -102,6 +119,10 @@ const ProductDetail = () => {
     return (
         <>
             <Header/>
+            <Helmet>
+                <title title={product.name}></title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             <div style={{ height: '100px' }}></div>
             <Container className="py-5 product-detail-page">
                 <Row className="g-5">

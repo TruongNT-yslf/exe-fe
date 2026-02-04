@@ -32,7 +32,8 @@ import {
 import {Link} from 'react-router-dom';
 import productManagerApi from "../../../api/ProductManagerApi";
 import AdminHeader from "../../../components/admin/AdminHeader";
-
+import {Helmet} from "react-helmet-async";
+import Logo from "../../../assets/images/LOGO-EXE.png";
 const AdminProductList = () => {
     // States
     const [products, setProducts] = useState([]);
@@ -320,7 +321,10 @@ const AdminProductList = () => {
         <Container fluid className="py-4">
             {/* Header với tiêu đề chính */}
             <AdminHeader></AdminHeader>
-
+            <Helmet>
+                <title>Danh sách sản phẩm</title>
+                <link rel="icon" href={Logo} />
+            </Helmet>
             {/* Filter Card */}
             <Card className="mb-4 shadow-sm border-0">
                 <Card.Header className="bg-light d-flex justify-content-between align-items-center">
