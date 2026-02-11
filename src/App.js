@@ -25,47 +25,53 @@ import EditProduct from "./components/admin/navigate-view-or-edit/EditProduct";
 import AdminViewProduct from "./components/admin/navigate-view-or-edit/ViewProduct";
 import Checkout from "./pages/checkout/CheckoutPage";
 import AdminOrderList from "./pages/admin/feature/AdminOrderList";
+import ProtectedRoute from "./routes/ProtectedRoute";
 function App() {
     const token = getToken();
-    return (
 
+    return (
         <AuthProvider>
             <Router>
                 <Routes>
-                    {/* Public */}
-                    <Route
-                        path="/login"
-                        element={
-                            <PublicRoute>
-                                <LoginPage />
-                            </PublicRoute>
-                        }
-                    />
+                    {/* ================= PUBLIC ROUTES ================= */}
+                    <Route path="/login" element={
+                        <PublicRoute>
+                            <LoginPage />
+                        </PublicRoute>
+                    } />
+
+                    <Route path="/home" element={<HomePage />} />
                     <Route path="/products" element={<ViewProduct />} />
                     <Route path="/products/:id" element={<ProductDetails />} />
-                    <Route path="/home" element={<HomePage />} />
-                    <Route path="/" element={<Navigate to={token ? "/home" : "/login"} replace />} />
                     <Route path="/blogs" element={<BlogList />} />
-                    <Route path="/blog/:id" element={<BlogDetail/>} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="/blog/:id" element={<BlogDetail />} />
                     <Route path="/logout" element={<Logout />} />
 
-                    {/* USER routes */}
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/change-password" element={<ChangePassword />} />
-                    {/* STAFF routes */}
+                    <Route path="/" element={<Navigate to="/home" replace />} />
 
-                    {/* ADMIN routes */}
-                    <Route path="/admin/blog" element={<BlogAdmin/>} />
+                    {/* ================= USER ROUTES ================= */}
+                    <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                    <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                    <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                    <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
 
-                    <Route path="/admin/dashboard" element={<AdminDashboard/>} />
-                    <Route path="/admin/product-management" element={<AdminProductList />} />
-                    <Route path="/admin/add-new-product" element={<AddNewProduct/>}/>
-                    <Route path="/admin/products/edit/:id" element={<EditProduct/>}/>
-                    <Route path="/admin/products/view/:id" element={<AdminViewProduct/>}/>
-                    <Route path="/admin/order-management" element={<AdminOrderList/>}/>
+                    {/* ================= ADMIN ROUTES ================= */}
+                    <Route path="/admin/*" element={
+                        <ProtectedRoute roles={['ROLE_ADMIN']}>
+                            <Routes>
+                                <Route path="dashboard" element={<AdminDashboard />} />
+                                <Route path="blog" element={<BlogAdmin />} />
+                                <Route path="product-management" element={<AdminProductList />} />
+                                <Route path="add-new-product" element={<AddNewProduct />} />
+                                <Route path="products/edit/:id" element={<EditProduct />} />
+                                <Route path="products/view/:id" element={<AdminViewProduct />} />
+                                <Route path="order-management" element={<AdminOrderList />} />
+                            </Routes>
+                        </ProtectedRoute>
+                    } />
+
+                    {/* Catch-all: Nếu gõ bậy bạ thì về trang chủ */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Router>
         </AuthProvider>

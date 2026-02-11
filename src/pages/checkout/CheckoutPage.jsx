@@ -121,6 +121,12 @@ const CheckoutPage = ({ userProfile }) => {
                         </div>
 
                         <div className="form-group">
+                            <label className="input-label">Email</label>
+                            <input className="input-field" type="text" value={formData.email}
+                                   onChange={e => setFormData({...formData, email: e.target.value})} />
+                        </div>
+
+                        <div className="form-group">
                             <label className="input-label">Số điện thoại</label>
                             <input className="input-field" type="text" value={formData.phone}
                                    onChange={e => setFormData({...formData, phone: e.target.value})} />
