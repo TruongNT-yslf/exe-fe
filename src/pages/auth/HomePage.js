@@ -11,6 +11,8 @@ import axios from "axios";
 import ChatBox from "../../components/chatbot/ChatBox";
 import {Helmet} from "react-helmet-async";
 import Logo from "../../assets/images/LOGO-EXE.png";
+import { get3Blogs } from '../../api/Blog';
+import { Link } from "react-router-dom";
 const BACKEND_URL = process.env.REACT_APP_API_URL
 
 export async function login(username, password) {
@@ -33,6 +35,7 @@ function HomePage() {
     const [categories, setCategories] = useState([]);
     const token = getToken();
     const { user, loading } = useContext(AuthContext);
+    const [relatedBlogs, setRelatedBlogs] = useState([]);
     const imageStyle = {
         height: '250px',
         objectFit: 'cover'
@@ -47,6 +50,15 @@ function HomePage() {
             .then(res => setCategories(res.data.data))
             .catch(err => console.error(err));
     }, []);
+
+    const fetchRelatedBlogs = async () => {
+        try {
+            const response = await get3Blogs();
+            setRelatedBlogs(response.data.data);
+        } catch (err) {
+            console.error('Error fetching related blogs:', err);
+        }
+    };
 
     if (loading) return <p className="text-center mt-5">Loading...</p>;
 
@@ -129,62 +141,38 @@ function HomePage() {
                 <Container>
                     <h2 className="text-center mb-4 fw-bold">Chia sẻ kiến thức</h2>
                     <Row>
-                        <Col md={4} className="d-flex mb-4">
-                            {/* Áp dụng class CSS tùy chỉnh cho card */}
-                            <Card className="fixed-size-card shadow-sm w-100">
+                        {relatedBlogs.map((relatedBlog) => (
+                            <Col md={4} className="d-flex mb-4" key={relatedBlog.id}>
+                                <Link
+                                    to={`/blog/${relatedBlog.id}`}
+                                    className="blog-detail-related-card text-decoration-none w-100"
+                                >
+                                    <Card className="fixed-size-card shadow-sm w-100">
+                                        <Card.Img
+                                            variant="top"
+                                            style={imageStyle}
+                                            src={relatedBlog.thumbnail}
+                                            alt={relatedBlog.title}
+                                        />
 
-                                {/* 1. Component Image (cao 150px) */}
-                                <Card.Img
-                                    variant="top"
-                                    style={imageStyle} // THAY ĐỔI ĐƯỜNG DẪN NÀY
-                                    src="https://maymatcaovilata.com/wp-content/uploads/2025/06/lang-nghe-may-tre-dan-Phu-Vinh.png.webp"
-                                    alt="Mây Tre Phú Vinh – Địa chỉ bán đồ thủ công chất lượng tại Hà Nội"
-                                />
+                                        <Card.Body className="d-flex flex-column">
+                                            <Card.Title>{relatedBlog.title}</Card.Title>
 
-                                {/* 2. Phần nội dung (cao 280px - 150px = 130px) */}
-                                <Card.Body className="d-flex flex-column">
-                                    <Card.Title>Mây Tre Phú Vinh – Địa chỉ bán đồ thủ công chất lượng tại Hà Nội</Card.Title>
-                                    {/* Dùng text-truncate để nội dung dài tự động cắt nếu muốn */}
-                                    <Card.Text className="line-clamp-3">
-                                        Nổi tiếng với những sản phẩm thủ công tinh xảo và chất lượng, Mây Tre Phú Vinh đã trở thành điểm đến tin cậy cho những ai yêu thích và trân trọng những sản phẩm từ mây tre. Không chỉ là nơi mua sắm, đây còn là không gian để người ta khám phá và cảm nhận nghệ thuật thủ công đầy tinh tế, cùng sự khéo léo và tài hoa của những nghệ nhân lành nghề.
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-
-                        <Col md={4} className="d-flex mb-4">
-                            <Card className="fixed-size-card shadow-sm w-100">
-                                <Card.Img
-                                    variant="top"
-                                    src="https://treladatthanh.com/admin_assets/source/tin-tuc/may-tre-dan-la-gi.jpg" // THAY ĐỔI ĐƯỜNG DẪN NÀY
-                                    style={imageStyle}
-                                    alt="Mây Tre Đan Là Gì?"
-                                />
-                                <Card.Body className="d-flex flex-column">
-                                    <Card.Title>Mây Tre Đan Là Gì? Những Sản Phẩm Mây Tre Đan</Card.Title>
-                                    <Card.Text className="line-clamp-3">
-                                        Các sản phẩm từ mây tre đan đã tồn tại trong văn hóa người Việt Nam từ hàng trăm năm qua. Vậy mây tre đan là gì? Các sản phẩm mây tre đan xuất khẩu phổ biến hiện nay gồm những sản phẩm gì? Cùng tìm hiểu tất cả qua nội dung bài viết sau đây.
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-
-                        <Col md={4} className="d-flex mb-4">
-                            <Card className="fixed-size-card shadow-sm w-100">
-                                <Card.Img
-                                    variant="top"
-                                    src="https://vhandy.com.vn/wp-content/uploads/2023/10/mau-tui-may-tre.jpg"
-                                    style={imageStyle}
-                                    alt="Thông báo đóng cửa thư viện"
-                                />
-                                <Card.Body className="d-flex flex-column">
-                                    <Card.Title>Túi xách mây tre đan – Lựa chọn hoàn hảo cho mùa hè năng động</Card.Title>
-                                    <Card.Text className="line-clamp-3">
-                                        Túi được làm từ mây tre đan thủ công, một nguồn nguyên liệu tự nhiên, bền vững và có khả năng tái chế cao. Mây tre là loại cây phát triển nhanh và không đòi hỏi sử dụng nhiều hóa chất trong quá trình canh tác, giúp giảm thiểu tác động tiêu cực đến môi trường. Đặc biệt, túi làm từ mây tre có thể phân hủy sinh học hoàn toàn, không gây ô nhiễm đất và nước như các loại túi nhựa thông thường.
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                                            <Card.Text
+                                                style={{
+                                                    display: "-webkit-box",
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: "vertical",
+                                                    overflow: "hidden",
+                                                }}
+                                            >
+                                                {relatedBlog.content}
+                                            </Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </Link>
+                            </Col>
+                        ))}
                     </Row>
                 </Container>
             </section>

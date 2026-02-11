@@ -17,3 +17,5 @@ export const updateBlog = (id, data) => api.put(`/blog/${id}`, data);
 
 // Xóa bài viết
 export const deleteBlog = (id) => api.delete(`/blog/${id}`);
+
+export const get3Blogs = () => api.get("/blog/top3");

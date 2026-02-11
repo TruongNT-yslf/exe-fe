@@ -15,7 +15,7 @@ export default function ProfilePage() {
     const [isUpdating, setIsUpdating] = useState(false);
 
     // Form State
-    const [basicInfo, setBasicInfo] = useState({fullName: "", phone: ""});
+    const [basicInfo, setBasicInfo] = useState({fullName: "", phone: "", email:""});
     const [selectedProvinceId, setSelectedProvinceId] = useState("");
     const [selectedWardId, setSelectedWardId] = useState("");
     const [detailAddress, setDetailAddress] = useState("");
@@ -39,6 +39,7 @@ export default function ProfilePage() {
                 setBasicInfo({
                     fullName: userData.fullName || "",
                     phone: userData.phone || "",
+                    email: userData.email || "",
                 });
 
                 if (userData.locationIds?.province) {
@@ -77,6 +78,7 @@ export default function ProfilePage() {
                     type: "BASIC",
                     fullName: basicInfo.fullName,
                     phone: basicInfo.phone,
+                    email: basicInfo.email,
                 };
             }
 
@@ -179,6 +181,15 @@ export default function ProfilePage() {
                                     className="form-control"
                                     value={basicInfo.phone}
                                     onChange={(e) => setBasicInfo({...basicInfo, phone: e.target.value})}
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">Email liên lạc</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={basicInfo.email}
+                                    onChange={(e) => setBasicInfo({...basicInfo, email: e.target.value})}
                                 />
                             </div>
                             <div className="col-12 text-end">
