@@ -44,7 +44,8 @@ function App() {
                     <Route path="/products" element={<ViewProduct />} />
                     <Route path="/products/:id" element={<ProductDetails />} />
                     <Route path="/home" element={<HomePage />} />
-                    <Route path="/" element={<Navigate to={token ? "/home" : "/login"} replace />} />
+                    {/*<Route path="/" element={<Navigate to={token ? "/home" : "/login"} replace />} />*/}
+                    <Route path="/" element={<Navigate to={"/home"} replace />} />
                     <Route path="/blogs" element={<BlogList />} />
                     <Route path="/blog/:id" element={<BlogDetail/>} />
                     <Route path="*" element={<Navigate to="/" replace />} />
