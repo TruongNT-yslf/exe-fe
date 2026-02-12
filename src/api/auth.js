@@ -63,3 +63,36 @@ export const forgotPassword = (key) => {
         headers: { "Content-Type": "text/plain" }
     });
 };
+
+// Lấy danh sách đơn hàng theo userId
+export const getUserOrders = async (params) => {
+    const token = getToken();
+    let url = `${BACKEND_URL}/orders/my-orders?userId=${params.userId}&page=${params.page}&size=${params.size}`;
+    if (params.status) {
+        url += `&status=${params.status}`;
+    }
+
+    const res = await fetch(url, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return await res.json();
+}
+
+export const cancelOrder = async (orderId, note) => {
+    const token = getToken();
+    let url = `${BACKEND_URL}/orders/my-orders/${orderId}?note=${encodeURIComponent(note)}`;
+    const res = await fetch(url, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return await res.json();
+}

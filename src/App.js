@@ -26,6 +26,7 @@ import AdminViewProduct from "./components/admin/navigate-view-or-edit/ViewProdu
 import Checkout from "./pages/checkout/CheckoutPage";
 import AdminOrderList from "./pages/admin/feature/AdminOrderList";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import MyOrders from "./pages/my-orders/MyOrders";
 function App() {
     const token = getToken();
 
@@ -54,7 +55,7 @@ function App() {
                     <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
                     <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                     <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
-
+                    <Route path="/my-orders" element={<ProtectedRoute><MyOrders/></ProtectedRoute>}/>
                     {/* ================= ADMIN ROUTES ================= */}
                     <Route path="/admin/*" element={
                         <ProtectedRoute roles={['ROLE_ADMIN']}>

@@ -20,7 +20,10 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             try {
                 const userData = await getUser();
-                if (userData) setUser(userData);
+                if (userData) {
+                    localStorage.setItem("userId", userData.userId);
+                    setUser(userData);
+                }
                 else removeToken();
             } catch (error) {
                 console.error("Auto fetch user failed:", error);
@@ -47,6 +50,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         removeToken();
+        localStorage.removeItem("userId");
         setUser(null);
     };
 
