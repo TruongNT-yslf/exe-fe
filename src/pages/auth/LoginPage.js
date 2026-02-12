@@ -58,13 +58,13 @@ function LoginPage() {
                     const response = await forgotPassword(forgotKey);
 
                     // 2. Kiểm tra flag success từ server (dựa trên JSON bạn cung cấp)
-                    if (response.success) {
+                    // if (response) {
                         setSuccessMsg("Mật khẩu mới đã được gửi tới email của bạn. Vui lòng kiểm tra hộp thư.");
                         // Có thể thêm điều hướng sau 3 giây: setTimeout(() => setMode("LOGIN"), 3000);
-                    } else {
-                        // 3. Xử lý trường hợp success: false (như lỗi 500 "Không tìm thấy người dùng")
-                        setErrorMsg(response.message || "Đã có lỗi xảy ra.");
-                    }
+                    // } else {
+                    //     // 3. Xử lý trường hợp success: false (như lỗi 500 "Không tìm thấy người dùng")
+                    //     setErrorMsg(response.message || "Đã có lỗi xảy ra.");
+                    // }
                 } catch (error) {
                     // 4. Xử lý lỗi kết nối hoặc lỗi nghiêm trọng từ phía client/network
                     alert(error.response?.data?.message || error.message || "Đã có lỗi xảy ra khi gửi yêu cầu.");
