@@ -185,17 +185,6 @@ function HomePage() {
                 </Container>
             </section>
 
-            {/* CTA Section */}
-            {!token ? (
-                <section className="cta text-center text-white">
-                    <Container>
-                        <h2 className="fw-bold">Ready to Get Started?</h2>
-                        <Button variant="light" size="lg">
-                            Sign Up Now
-                        </Button>
-                    </Container>
-                </section>
-            ) : null}
             < ChatBox/>
             <Footer />
         </>
