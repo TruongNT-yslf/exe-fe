@@ -35,6 +35,8 @@ import {AuthContext} from "../../context/AuthContext";
 
 export default function MyOrders() {
 
+    const {user} = useContext(AuthContext);
+    const userId = user.userId;
     const handleLogout = () => {
         logout();
         navigate("/login");
@@ -42,8 +44,6 @@ export default function MyOrders() {
 
     const {logout} = useContext(AuthContext);
     const navigate = useNavigate();
-
-    const userId = localStorage.getItem("userId");
     // States
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
