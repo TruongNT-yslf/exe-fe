@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { getBlogs } from '../../api/Blog';
 import { formatDate } from '../../utils/dateFormat';
 import './BlogList.css';
+import Header from "../Header";
+import Footer from "../Footer";
 
 export default function BlogList() {
     const [blogs, setBlogs] = useState([]);
@@ -56,7 +58,9 @@ export default function BlogList() {
     }
 
     return (
-        <div className="blog-list-container">
+<>
+    <Header />
+        <div className="blog-list-container" style={{ marginTop: '100px' }}>
             <div className="blog-list-wrapper">
                 <div className="blog-list-header">
                     <h1 className="blog-list-title">TIN TỨC MỚI</h1>
@@ -114,5 +118,7 @@ export default function BlogList() {
                 </div>
             </div>
         </div>
+    <Footer />
+</>
     );
 }

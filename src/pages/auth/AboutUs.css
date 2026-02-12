@@ -1,0 +1,109 @@
+/* AboutUs.css */
+.about-container {
+    background-color: #fdfbf7;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+    height: 400px;
+    background-color: #e5e0d8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.hero h1 {
+    font-family: 'serif';
+    font-size: 3rem;
+    color: #5c4a33;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-style: italic;
+    color: #8c765a;
+    font-size: 1.2rem;
+}
+
+/* Story Section */
+.story-section {
+    max-width: 1000px;
+    margin: 60px auto;
+    display: flex;
+    gap: 50px;
+    padding: 0 20px;
+    align-items: center;
+}
+
+.story-content {
+    flex: 1;
+}
+
+.story-content h2 {
+    font-size: 2rem;
+    color: #5c4a33;
+    border-bottom: 2px solid #d4bc9c;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.story-image {
+    flex: 1;
+}
+
+.story-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Values Section */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    background-color: #f4f1ea;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.value-item h3 {
+    color: #5c4a33;
+    margin: 15px 0;
+}
+
+/* CTA */
+.cta-section {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cta-button {
+    background-color: #5c4a33;
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.cta-button:hover {
+    background-color: #8c765a;
+}
+
+/* Responsive cho điện thoại */
+@media (max-width: 768px) {
+    .story-section {
+        flex-direction: column;
+    }
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+}

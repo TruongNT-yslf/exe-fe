@@ -188,7 +188,7 @@ export default function Header() {
                 <Navbar.Collapse id="main-nav">
                     <Nav className="ms-auto align-items-center">
                         <Nav.Link as={Link} to="/" className="nav-item-link">Trang chủ</Nav.Link>
-                        <Nav.Link as={Link} to="/about" className="nav-item-link">Về chúng tôi</Nav.Link>
+                        <Nav.Link as={Link} to="/about-us" className="nav-item-link">Về chúng tôi</Nav.Link>
 
                         <NavDropdown
                             title="Danh mục"
