@@ -11,7 +11,7 @@ import axios from "axios";
 import ChatBox from "../../components/chatbot/ChatBox";
 import {Helmet} from "react-helmet-async";
 import Logo from "../../assets/images/LOGO-EXE.png";
-import { get3Blogs } from '../../api/Blog';
+import {get3Blogs, getBlogs} from '../../api/Blog';
 import { Link } from "react-router-dom";
 const BACKEND_URL = process.env.REACT_APP_API_URL
 
@@ -46,19 +46,24 @@ function HomePage() {
         navigate("/login");
     };
     useEffect(() => {
+        const fetchRelatedBlogs = async () => {
+            try {
+                const response = await getBlogs();
+                const filtered = response.data.data
+                    .slice(0, 3) || [];
+                setRelatedBlogs(filtered);
+            } catch (err) {
+                console.error('Error fetching related blogs:', err);
+            }
+        };
+
         axios.get(`${BACKEND_URL}/categories`)
             .then(res => setCategories(res.data.data))
             .catch(err => console.error(err));
+        fetchRelatedBlogs();
     }, []);
 
-    const fetchRelatedBlogs = async () => {
-        try {
-            const response = await get3Blogs();
-            setRelatedBlogs(response.data.data);
-        } catch (err) {
-            console.error('Error fetching related blogs:', err);
-        }
-    };
+
 
     if (loading) return <p className="text-center mt-5">Loading...</p>;
 
@@ -139,40 +144,43 @@ function HomePage() {
             {/* Features Section */}
             <section id="features" className="py-5">
                 <Container>
-                    <h2 className="text-center mb-4 fw-bold">Chia sẻ kiến thức</h2>
+                    <h2 className="text-center mb-5 fw-bold section-title">Chia sẻ kiến thức</h2>
                     <Row>
-                        {relatedBlogs.map((relatedBlog) => (
-                            <Col md={4} className="d-flex mb-4" key={relatedBlog.id}>
-                                <Link
-                                    to={`/blog/${relatedBlog.id}`}
-                                    className="blog-detail-related-card text-decoration-none w-100"
-                                >
-                                    <Card className="fixed-size-card shadow-sm w-100">
-                                        <Card.Img
-                                            variant="top"
-                                            style={imageStyle}
-                                            src={relatedBlog.thumbnail}
-                                            alt={relatedBlog.title}
-                                        />
-
-                                        <Card.Body className="d-flex flex-column">
-                                            <Card.Title>{relatedBlog.title}</Card.Title>
-
-                                            <Card.Text
-                                                style={{
-                                                    display: "-webkit-box",
-                                                    WebkitLineClamp: 2,
-                                                    WebkitBoxOrient: "vertical",
-                                                    overflow: "hidden",
-                                                }}
-                                            >
-                                                {relatedBlog.content}
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </Link>
-                            </Col>
-                        ))}
+                        {relatedBlogs && relatedBlogs.length > 0 ? (
+                            relatedBlogs.map((blog) => (
+                                <Col md={4} key={blog.id} className="mb-4">
+                                    <Link to={`/blog/${blog.id}`} className="text-decoration-none text-dark">
+                                        <Card className="h-100 border-0 shadow-sm hover-shadow transition">
+                                            <Card.Img
+                                                variant="top"
+                                                style={{ height: '220px', objectFit: 'cover' }}
+                                                src={blog.thumbnail || 'placeholder-image-url.jpg'}
+                                                alt={blog.title}
+                                            />
+                                            <Card.Body>
+                                                <Card.Title className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
+                                                    {blog.title}
+                                                </Card.Title>
+                                                <Card.Text
+                                                    className="text-muted small"
+                                                    style={{
+                                                        display: "-webkit-box",
+                                                        WebkitLineClamp: 3, // Tăng lên 3 dòng cho dễ đọc
+                                                        WebkitBoxOrient: "vertical",
+                                                        overflow: "hidden",
+                                                    }}
+                                                >
+                                                    {/* Loại bỏ tag HTML nếu nội dung là HTML */}
+                                                    {blog.content?.replace(/<[^>]*>?/gm, '')}
+                                                </Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    </Link>
+                                </Col>
+                            ))
+                        ) : (
+                            <p className="text-center">Đang tải bài viết...</p>
+                        )}
                     </Row>
                 </Container>
             </section>

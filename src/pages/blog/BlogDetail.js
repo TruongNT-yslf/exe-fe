@@ -7,6 +7,8 @@ import { formatDate } from '../../utils/dateFormat';
 import './BlogDetail.css';
 import {Helmet} from "react-helmet-async";
 import Logo from "../../assets/images/LOGO-EXE.png";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 export default function BlogDetail() {
     const { id } = useParams();
     const [blog, setBlog] = useState(null);
@@ -76,7 +78,9 @@ export default function BlogDetail() {
     }
 
     return (
-        <div className="blog-detail-container">
+<>
+        <Header />
+        <div className="blog-detail-container" style={{ marginTop: '100px' }}>
             <Helmet>
                 <title>Blog | Nhà mây tre</title>
                 <link rel="icon" href={Logo} />
@@ -178,5 +182,7 @@ export default function BlogDetail() {
                 </div>
             </div>
         </div>
+    <Footer />
+</>
     );
 }
