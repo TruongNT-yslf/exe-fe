@@ -2,8 +2,10 @@ import React from 'react';
 import './AboutUs.css';
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import {useNavigate} from "react-router-dom";
 
 const AboutUs = () => {
+    const navigate = useNavigate();
     return (
         <>
             <Header/>
@@ -29,8 +31,8 @@ const AboutUs = () => {
                 </div>
                 <div className="story-image">
                     <img
-                        src="https://images.unsplash.com/photo-1611082216373-7c1843232db3?q=80&w=800"
-                        alt="Nghệ nhân đan mây tre"
+                        src="https://res.cloudinary.com/dio7kyp2t/image/upload/v1769949249/ecom_store/products/edpr3espymddj2oibjqf.jpg"
+                        alt="Sản phẩm mây tre"
                     />
                 </div>
             </section>
@@ -59,7 +61,7 @@ const AboutUs = () => {
                 <h2>Ghé thăm ngôi nhà nhỏ của tụi mình</h2>
                 <p><strong>Hotline:</strong> 0869 152 993</p>
                 <p><strong>Email:</strong> nguyenhoa230803@gmail.com</p>
-                <button className="cta-button">Khám Phá Sản Phẩm</button>
+                <button className="cta-button" onClick={() => navigate("/products")}>Khám Phá Sản Phẩm</button>
             </section>
         </div>
             <Footer/>
