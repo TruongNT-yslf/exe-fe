@@ -6,7 +6,7 @@ export default function Logout() {
 
     useEffect(() => {
         removeToken();
-        navigate("/login", { replace: true });
+        navigate("/home", { replace: true });
     }, [navigate]);
 
     return null;
